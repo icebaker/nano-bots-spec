@@ -94,6 +94,12 @@ Together, these components create a fully functional **Nano Bot**:
 Nano Bot = (cartridge.yml + implementation + provider)
 ```
 
+## Projects
+
+Implementations of this specification:
+
+- Ruby: https://github.com/icebaker/ruby-nano-bots
+
 # Cartridges
 
 ![Cartridges](https://user-images.githubusercontent.com/113217272/237534411-61cd7610-5a8c-4294-8840-559a1c58c603.png)
@@ -422,6 +428,48 @@ well. How can I assist you?
 
 You may name your binary as you wish, with `nano-bot` being just an illustrative example.
 
+## Cartridges
+
+Cartridges are YML files and should be loaded according to the path specified by the user:
+
+```bash
+nano-bot assistant.yml - repl
+```
+
+This command should attempt to load the `assistant.yml` file. The user may omit the file extension:
+
+```bash
+nano-bot assistant - repl
+```
+
+In this case, the implementation should attempt to load either the `assistant.yml` or `assistant.yaml` file.
+
+If the environment variable `NANO_BOTS_CARTRIDGES_DIRECTORY` is defined and the path was not found in the command's working directory, the implementation should attempt to load the file from the path specified in the environment variable:
+
+```bash
+NANO_BOTS_CARTRIDGES_DIRECTORY=/home/user/cartridges
+
+nano-bot assistant - repl
+```
+
+Paths that should be attempted to be loaded:
+
+
+```text
+/home/user/cartridges/assistant
+/home/user/cartridges/assistant.yml
+/home/user/cartridges/assistant.yaml
+```
+
+If no file is found, the implementation should fallback to attempting to load from the default expected cartridges directory, adhering to the [XDG specification](https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html):
+
+
+```text
+/home/user/.local/share/nano-bots/cartridges/assistant
+/home/user/.local/share/nano-bots/cartridges/assistant.yml
+/home/user/.local/share/nano-bots/cartridges/assistant.yaml
+```
+
 ## State
 
 ### Stateless
@@ -452,13 +500,15 @@ In this example, both `E15D` and `D9D6` are distinct identifiers used to indicat
 
 In this scenario, both Eval and REPL store their states (history) and should be capable of performing multi-turn interactions. Eval will remember its previous interactions, and a REPL will remember its previous interactions even if it is exited and started again.
 
-By default, implementations are encouraged to be [XDG compliant](https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html) or follow some popular standard for your target Operating System, which means that the default storage path would be:
+By default, implementations should be [XDG compliant](https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html), which means that the default storage path would be:
 
 ```text
 /home/user/.local/state/nano-bots/your-implementation
 ```
 
-A Cartridge may include a section that defines a custom directory for storing the states:
+If the `NANO_BOTS_STATE_DIRECTORY` environment variable exists, it should be used as the directory to store the states.
+
+A Cartridge may include a section that defines a custom directory for storing the states. In this case, it will override both the default and the path specified by the environment variable:
 
 ```yaml
 ---
