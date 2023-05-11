@@ -455,7 +455,7 @@ In this scenario, both Eval and REPL store their states (history) and should be 
 By default, implementations are encouraged to be [XDG compliant](https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html) or follow some popular standard for your target Operating System, which means that the default storage path would be:
 
 ```text
-/home/user/.local/share/.nano-bots/your-implementation
+/home/user/.local/state/nano-bots/your-implementation
 ```
 
 A Cartridge may include a section that defines a custom directory for storing the states:
@@ -480,13 +480,13 @@ name: Assistant
 version: 0.0.1
 
 state:
-  directory: /home/user/.local/share/.nano-bots
+  directory: /home/user/.local/state/nano-bots
 ```
 
 The state should be stored in a path similar to this:
 
 ```text
-/home/user/.local/share/.nano-bots/your-implementation/Assistant/0.0.1/E15D/state.json
+/home/user/.local/state/nano-bots/your-implementation/Assistant/0.0.1/E15D/state.json
 ```
 
 JSON is merely an example; each implementation can choose the most suitable data format to work with.
