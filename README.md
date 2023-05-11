@@ -41,20 +41,20 @@ provider:
 Here's what a fully-functional implementation of Nano Bots feels like:
 
 ```bash
-nano-bot to-en-us-translator.yml eval "Salut, comment ça va?"
+nano-bot to-en-us-translator.yml - eval "Salut, comment ça va?"
 # => Hello, how are you doing?
 
-nano-bot midjourney.yml eval "happy and friendly cyberpunk robot"
+nano-bot midjourney.yml - eval "happy and friendly cyberpunk robot"
 # => The robot exploring a bustling city, surrounded by neon lights
 #    and high-rise buildings. The prompt should include colorful
 #    lighting and a sense of excitement in the facial expression.
 
-nano-bot lisp.yml eval "(+ 1 2)"
+nano-bot lisp.yml - eval "(+ 1 2)"
 # => 3
 
 cat article.txt |
-  nano-bot to-en-us-translator.yml eval |
-  nano-bot summarizer.yml eval
+  nano-bot to-en-us-translator.yml - eval |
+  nano-bot summarizer.yml - eval
 # -> LLM stands for Large Language Model, which refers to an
 #    artificial intelligence algorithm capable of processing
 #    and understanding vast amounts of natural language data,
@@ -63,7 +63,7 @@ cat article.txt |
 ```
 
 ```bash
-nano-bot assistant.yml repl
+nano-bot assistant.yml - repl
 ```
 
 ```text

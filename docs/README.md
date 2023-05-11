@@ -36,20 +36,20 @@ provider:
 Here's what a fully-functional implementation of Nano Bots feels like:
 
 ```bash
-nano-bot to-en-us-translator.yml eval "Salut, comment ça va?"
+nano-bot to-en-us-translator.yml - eval "Salut, comment ça va?"
 # => Hello, how are you doing?
 
-nano-bot midjourney.yml eval "happy and friendly cyberpunk robot"
+nano-bot midjourney.yml - eval "happy and friendly cyberpunk robot"
 # => The robot exploring a bustling city, surrounded by neon lights
 #    and high-rise buildings. The prompt should include colorful
 #    lighting and a sense of excitement in the facial expression.
 
-nano-bot lisp.yml eval "(+ 1 2)"
+nano-bot lisp.yml - eval "(+ 1 2)"
 # => 3
 
 cat article.txt |
-  nano-bot to-en-us-translator.yml eval |
-  nano-bot summarizer.yml eval
+  nano-bot to-en-us-translator.yml - eval |
+  nano-bot summarizer.yml - eval
 # -> LLM stands for Large Language Model, which refers to an
 #    artificial intelligence algorithm capable of processing
 #    and understanding vast amounts of natural language data,
@@ -58,7 +58,7 @@ cat article.txt |
 ```
 
 ```bash
-nano-bot assistant.yml repl
+nano-bot assistant.yml - repl
 ```
 
 ```text
@@ -236,7 +236,7 @@ An implementation may opt to build its REPL from scratch or leverage existing te
 
 An implementation would likely provide access to the REPL as follows:
 ```bash
-nano-bot assistant.yml repl
+nano-bot assistant.yml - repl
 ```
 
 This is an example of a functioning REPL based on the previous YAML fragment:
@@ -260,10 +260,6 @@ anything related to the color pink you need help with?
 
 🤖> |
 ```
-
-#### State
-
-A REPL should be capable of maintaining a conversation, which means that throughout its lifetime, it needs to retain the conversation history and utilize it during interactions.
 
 #### Boot
 
@@ -295,7 +291,7 @@ Eval (short for evaluation) refers to single-turn executions of the Nano Bot tha
 
 An implementation would likely provide access to eval as follows:
 ```bash
-nano-bot assistant.yml eval "What is the distance to the Moon?"
+nano-bot assistant.yml - eval "What is the distance to the Moon?"
 ```
 
 ```text
@@ -303,12 +299,12 @@ The average distance between the Earth and the Moon
 is about 238,855 miles (384,400 kilometers).
 ```
 
-Evaluation executions do not provide boot messages and are stateless.
+Evaluation executions do not provide boot messages.
 
 Implementations should also be capable of receiving input from [standard streams](https://en.wikipedia.org/wiki/Standard_streams), allowing execution with [pipe operators](https://en.wikipedia.org/wiki/Pipeline_(Unix)):
 
 ```bash
-echo "What is the distance to the Moon?" | nano-bot assistant.yml eval
+echo "What is the distance to the Moon?" | nano-bot assistant.yml - eval
 ```
 
 ```text
@@ -361,10 +357,17 @@ provider:
     stream: true
     temperature: 1
     top_p: 1
+    n: 1
+    stop: null
+    max_tokens: null
+    presence_penalty: 0
+    frequency_penalty: 0
+    logit_bias: null
     credentials:
       address: ENV/OPENAI_API_ADDRESS
       access-token: ENV/OPENAI_API_ACCESS_TOKEN
       user-identifier: ENV/OPENAI_API_USER_IDENTIFIER
+      # https://platform.openai.com/docs/guides/safety-best-practices/end-user-ids
 ```
 
 # Implementations
@@ -374,20 +377,20 @@ Nano Bots can be implemented in any programming language. Typically, implementat
 Here's what a fully-functional implementation of Nano Bots feels like:
 
 ```bash
-nano-bot to-en-us-translator.yml eval "Salut, comment ça va?"
+nano-bot to-en-us-translator.yml - eval "Salut, comment ça va?"
 # => Hello, how are you doing?
 
-nano-bot midjourney.yml eval "happy and friendly cyberpunk robot"
+nano-bot midjourney.yml - eval "happy and friendly cyberpunk robot"
 # => The robot exploring a bustling city, surrounded by neon lights
 #    and high-rise buildings. The prompt should include colorful
 #    lighting and a sense of excitement in the facial expression.
 
-nano-bot lisp.yml eval "(+ 1 2)"
+nano-bot lisp.yml - eval "(+ 1 2)"
 # => 3
 
 cat article.txt |
-  nano-bot to-en-us-translator.yml eval |
-  nano-bot summarizer.yml eval
+  nano-bot to-en-us-translator.yml - eval |
+  nano-bot summarizer.yml - eval
 # -> LLM stands for Large Language Model, which refers to an
 #    artificial intelligence algorithm capable of processing
 #    and understanding vast amounts of natural language data,
@@ -396,7 +399,7 @@ cat article.txt |
 ```
 
 ```bash
-nano-bot assistant.yml repl
+nano-bot assistant.yml - repl
 ```
 
 ```text
@@ -409,3 +412,136 @@ well. How can I assist you?
 ```
 
 You may name your binary as you wish, with `nano-bot` being just an illustrative example.
+
+## State
+
+### Stateless
+
+By default, Nano Bots are stateless.
+
+An evaluation is a single-turn interaction.
+
+A REPL should be capable of maintaining multi-turn interactions, which means it must retain the conversation history and utilize it during interactions throughout its lifetime. Once the user exits the REPL, all history are discarded.
+
+The default stateless behavior is defined by the `-` character in interactions:
+
+```bash
+nano-bot assistant.yml - repl
+nano-bot lisp.yml - eval "Hi"
+```
+
+### Stateful
+
+Implementations should support storing state by identifying a state key different from `-`:
+
+```bash
+nano-bot assistant.yml E15DC repl
+nano-bot lisp.yml D9D6 eval "Hi"
+```
+
+In this example, both `E15DC` and `D9D6` are distinct identifiers used to indicate which state key should be employed for storing and retrieving state information related to that interaction.
+
+In this scenario, both Eval and REPL store their states (history) and should be capable of performing multi-turn interactions. Eval will remember its previous interactions, and a REPL will remember its previous interactions even if it is exited and started again.
+
+By default, implementations are encouraged to be [XDG compliant](https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html) or follow some popular standard for your target Operating System, which means that the default storage path would be:
+
+```text
+/home/user/.local/share/.nano-bots/your-implementation
+```
+
+A Cartridge may include a section that defines a custom directory for storing the states:
+
+```yaml
+---
+state:
+  directory: ENV/NANO_BOTS_STATE_DIRECTORY
+```
+
+The state should be stored in a manner that ensures isolation between multiple Nano Bots and Implementations.
+
+In this example:
+
+```bash
+nano-bot assistant.yml E15DC repl
+```
+
+```yaml
+---
+name: Assistant
+version: 0.0.1
+
+state:
+  directory: /home/user/.local/share/.nano-bots
+```
+
+The state should be stored in a path similar to this:
+
+```text
+/home/user/.local/share/.nano-bots/your-implementation/Assistant/0.0.1/E15DC/state.json
+```
+
+JSON is merely an example; each implementation can choose the most suitable data format to work with.
+
+> A Nano Bot should **never** depend on or rely on a state to function fully—**absolutely never**.
+
+States serve as a convenience for users and should not be used to influence Nano Bot behaviors. Instead, such behaviors should be managed through the [Behaviors](?id=behaviors) section of the Cartridge YAML. This reinforces the notion that a Cartridge YAML file should ultimately be the sole and only necessary information for the bot to operate as expected.
+
+# Specification
+
+This example showcases all the possible keys present in a Nano Bot Cartridge YAML file:
+
+```yaml
+---
+name: Assistant
+version: 0.0.1
+
+behaviors:
+  interaction:
+    directive: You are a helpful assistant.
+    backdrop: |
+      The Moon is Earth's natural satellite, orbiting our planet.
+      The user might use the term "Selene" when referring to the Moon.
+    instruction: Answer the user's questions.
+  boot:
+    directive: You are a helpful assistant.
+    backdrop: |
+      This is a good example of a welcome message:
+      "Welcome! How may I assist you?"
+    instruction: Provide a welcome message.
+
+interfaces:
+  repl:
+    stream: true
+    prefix: "\n"
+    postfix: "\n"
+    prompt:
+      - text: '🤖'
+      - text: '> '
+        color: blue
+  eval:
+    stream: true
+    prefix: "\n"
+    postfix: "\n"
+
+state:
+  directory: ENV/NANO_BOTS_STATE_DIRECTORY
+
+provider:
+  name: openai
+  settings:
+    model: gpt-3.5-turbo
+    stream: true
+    temperature: 1
+    top_p: 1
+    n: 1
+    stop: null
+    max_tokens: null
+    presence_penalty: 0
+    frequency_penalty: 0
+    logit_bias: null
+    credentials:
+      address: ENV/OPENAI_API_ADDRESS
+      access-token: ENV/OPENAI_API_ACCESS_TOKEN
+      user-identifier: ENV/OPENAI_API_USER_IDENTIFIER
+      # https://platform.openai.com/docs/guides/safety-best-practices/end-user-ids
+```
