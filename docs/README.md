@@ -329,7 +329,7 @@ If specified in the cartridge YAML and supported by the provider, the evaluation
 
 Nano Bots should be **provider-agnostic**, which means that the same Nano Bot should be able to run on different providers.
 
-Examples of popular providers include: [Vicuna](https://github.com/lm-sys/FastChat), [Open AI](https://platform.openai.com/docs/api-reference), [Google Bard](https://bard.google.com), [Alpaca](https://github.com/tatsu-lab/stanford_alpaca), and [LLaMA](https://github.com/facebookresearch/llama).
+Examples of popular providers include: [Vicuna](https://github.com/lm-sys/FastChat), [Open AI](https://platform.openai.com/docs/api-reference), [Google PaLM](https://developers.generativeai.google), [Alpaca](https://github.com/tatsu-lab/stanford_alpaca), and [LLaMA](https://github.com/facebookresearch/llama).
 
 The `provider:` section of the cartridge should specify the provider's `name`, followed by a `settings` section containing relevant information that enables the Nano Bot to interact with the provider, adhering to the provider's API expected settings.
 
