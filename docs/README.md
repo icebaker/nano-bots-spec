@@ -491,7 +491,7 @@ The state should be stored in a path similar to this:
 
 JSON is merely an example; each implementation can choose the most suitable data format to work with.
 
-> A Nano Bot should **never** depend on or rely on a state to function fully—**absolutely never**.
+> ⚠️ A Nano Bot should **never** depend on or rely on a state to function fully—**absolutely never**.
 
 States serve as a convenience for users and should not be used to influence Nano Bot behaviors. Instead, such behaviors should be managed through the [Behaviors](?id=behaviors) section of the Cartridge YAML. This reinforces the notion that a Cartridge YAML file should ultimately be the sole and only necessary information for the bot to operate as expected.
 
