@@ -436,7 +436,7 @@ The default stateless behavior is defined by the `-` character in interactions:
 
 ```bash
 nano-bot assistant.yml - repl
-nano-bot lisp.yml - eval "Hi"
+nano-bot assistant.yml - eval "Hi"
 ```
 
 ### Stateful
@@ -445,7 +445,7 @@ Implementations should support storing state by identifying a state key differen
 
 ```bash
 nano-bot assistant.yml E15DC repl
-nano-bot lisp.yml D9D6 eval "Hi"
+nano-bot assistant.yml D9D6 eval "Hi"
 ```
 
 In this example, both `E15DC` and `D9D6` are distinct identifiers used to indicate which state key should be employed for storing and retrieving state information related to that interaction.
