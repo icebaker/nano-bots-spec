@@ -287,6 +287,15 @@ If specified in the cartridge YAML and supported by the provider, the REPL shoul
 
 ### Eval
 
+```yaml
+---
+interfaces:
+  eval:
+    stream: true
+    prefix: "\n"
+    postfix: "\n"
+```
+
 Eval (short for evaluation) refers to single-turn executions of the Nano Bot that, when given an input, produce an output.
 
 An implementation would likely provide access to eval as follows:
