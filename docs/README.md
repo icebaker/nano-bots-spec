@@ -444,11 +444,11 @@ nano-bot assistant.yml - eval "Hi"
 Implementations should support storing state by identifying a state key different from `-`:
 
 ```bash
-nano-bot assistant.yml E15DC repl
+nano-bot assistant.yml E15D repl
 nano-bot assistant.yml D9D6 eval "Hi"
 ```
 
-In this example, both `E15DC` and `D9D6` are distinct identifiers used to indicate which state key should be employed for storing and retrieving state information related to that interaction.
+In this example, both `E15D` and `D9D6` are distinct identifiers used to indicate which state key should be employed for storing and retrieving state information related to that interaction.
 
 In this scenario, both Eval and REPL store their states (history) and should be capable of performing multi-turn interactions. Eval will remember its previous interactions, and a REPL will remember its previous interactions even if it is exited and started again.
 
@@ -471,7 +471,7 @@ The state should be stored in a manner that ensures isolation between multiple N
 In this example:
 
 ```bash
-nano-bot assistant.yml E15DC repl
+nano-bot assistant.yml E15D repl
 ```
 
 ```yaml
@@ -486,7 +486,7 @@ state:
 The state should be stored in a path similar to this:
 
 ```text
-/home/user/.local/share/.nano-bots/your-implementation/Assistant/0.0.1/E15DC/state.json
+/home/user/.local/share/.nano-bots/your-implementation/Assistant/0.0.1/E15D/state.json
 ```
 
 JSON is merely an example; each implementation can choose the most suitable data format to work with.
