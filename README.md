@@ -21,19 +21,14 @@ Here's what a Nano Bot _Cartridge_ looks like:
 
 ```yaml
 ---
-name: Assistant
-version: 0.0.1
+meta:
+  name: Nano Bot Name
+  author: Your Name
+  version: 0.0.1
 
 behaviors:
   interaction:
     directive: You are a helpful assistant.
-
-interfaces:
-  repl:
-    prompt:
-      - text: '🤖'
-      - text: '> '
-        color: blue
 
 provider:
   name: openai
@@ -48,20 +43,20 @@ provider:
 Here's what a fully-functional implementation of Nano Bots feels like:
 
 ```bash
-nano-bot to-en-us-translator.yml - eval "Salut, comment ça va?"
+nb to-en-us-translator.yml - eval "Salut, comment ça va?"
 # => Hello, how are you doing?
 
-nano-bot midjourney.yml - eval "happy and friendly cyberpunk robot"
+nb midjourney.yml - eval "happy and friendly cyberpunk robot"
 # => The robot exploring a bustling city, surrounded by neon lights
 #    and high-rise buildings. The prompt should include colorful
 #    lighting and a sense of excitement in the facial expression.
 
-nano-bot lisp.yml - eval "(+ 1 2)"
+nb lisp.yml - eval "(+ 1 2)"
 # => 3
 
 cat article.txt |
-  nano-bot to-en-us-translator.yml - eval |
-  nano-bot summarizer.yml - eval
+  nb to-en-us-translator.yml - eval |
+  nb summarizer.yml - eval
 # -> LLM stands for Large Language Model, which refers to an
 #    artificial intelligence algorithm capable of processing
 #    and understanding vast amounts of natural language data,
@@ -70,7 +65,7 @@ cat article.txt |
 ```
 
 ```bash
-nano-bot assistant.yml - repl
+nb assistant.yml - repl
 ```
 
 ```text
