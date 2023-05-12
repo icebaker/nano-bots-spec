@@ -46,10 +46,10 @@ Here's what a fully-functional implementation of Nano Bots feels like:
 nb to-en-us-translator.yml - eval "Salut, comment ça va?"
 # => Hello, how are you doing?
 
-nb midjourney.yml - eval "happy and friendly cyberpunk robot"
-# => The robot exploring a bustling city, surrounded by neon lights
-#    and high-rise buildings. The prompt should include colorful
-#    lighting and a sense of excitement in the facial expression.
+nb midjourney.yml - eval "happy cyberpunk robot"
+# => A cheerful and fun-loving robot is dancing wildly amidst a
+#    futuristic and lively cityscape. Holographic advertisements
+#    and vibrant neon colors can be seen in the background.
 
 nb lisp.yml - eval "(+ 1 2)"
 # => 3
