@@ -625,7 +625,7 @@ state:
 The state should be stored in a path similar to this:
 
 ```text
-/home/user/.local/state/nano-bots/your-implementation/Assistant/0.0.1/E15D/state.json
+/home/user/.local/state/nano-bots/your-implementation/your-name/nano-bot-name/0-0-1/E15D/state.json
 ```
 
 JSON is merely an example; each implementation can choose the most suitable data format to work with.
