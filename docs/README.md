@@ -216,15 +216,53 @@ An `instruction` is a clear and concise directive given to the bot, intended to 
 
 Implementations should support two possible interaction interfaces: REPL and Eval.
 
+You can customize both the _input_ and _output_ with prefixes, suffixes, and adapters for all interfaces:
+
+```yaml
+---
+interfaces:
+  input:
+    prefix: "\n"
+    suffix: "\n"
+    adapter:
+      fennel: |
+        (.. "```" content "```")
+      lua: |
+        "```" .. content .. "```"
+  output:
+    stream: true
+    prefix: "\n"
+    suffix: "\n"
+    adapter:
+      fennel: |
+        (.. "```" content "```")
+      lua: |
+        "```" .. content .. "```"
+```
+
 ### REPL
 
 ```yaml
 ---
 interfaces:
   repl:
-    stream: true
-    prefix: "\n"
-    postfix: "\n"
+    input:
+      prefix: "\n"
+      suffix: "\n"
+      adapter:
+        fennel: |
+          (.. "```" content "```")
+        lua: |
+          "```" .. content .. "```"
+    output:
+      stream: true
+      prefix: "\n"
+      suffix: "\n"
+      adapter:
+        fennel: |
+          (.. "```" content "```")
+        lua: |
+          "```" .. content .. "```"
     prompt:
       - text: '🤖'
       - text: '> '
@@ -240,7 +278,19 @@ An implementation would likely provide access to the REPL as follows:
 nb assistant.yml - repl
 ```
 
-This is an example of a functioning REPL based on the previous YAML fragment:
+This is an example of a functioning REPL based on the following YAML fragment:
+
+```yaml
+---
+interfaces:
+  repl:
+    output:
+      prefix: "\n"
+      postfix: "\n"
+      prompt:
+        - text: '🤖'
+        - text: '> '
+```
 
 ```text
 🤖> Hi, how are you doing?
@@ -288,9 +338,23 @@ I am here to make your life easier and more efficient.
 ---
 interfaces:
   eval:
-    stream: true
-    prefix: "\n"
-    postfix: "\n"
+    input:
+      prefix: "\n"
+      suffix: "\n"
+      adapter:
+        fennel: |
+          (.. "```" content "```")
+        lua: |
+          "```" .. content .. "```"
+    output:
+      stream: true
+      prefix: "\n"
+      suffix: "\n"
+      adapter:
+        fennel: |
+          (.. "```" content "```")
+        lua: |
+          "```" .. content .. "```"
 ```
 
 Eval (short for evaluation) refers to single-turn executions of the Nano Bot that, when given an input, produce an output.
@@ -317,6 +381,34 @@ echo "What is the distance to the Moon?" | nb assistant.yml - eval
 The average distance from the Earth to the Moon
 is about 238,855 miles (384,400 kilometers).
 ```
+
+### Adapters
+
+Adapters are simple and small pieces of code that can manipulate inputs and outputs. Implementations should support two languages for adapters: [Lua](https://www.lua.org/about.html) and [Fennel](https://fennel-lang.org). 
+
+Both languages are simple, extremely lightweight, and fast. They are widely available and supported by multiple platforms and operating systems, and can be easily embedded into any programming language.
+
+```yaml
+---
+adapter:
+  fennel: |
+    (.. "```" content "```")
+```
+
+```yaml
+---
+adapter:
+  lua: |
+    "```" .. content .. "```"
+```
+
+Adapters have access to a `content` variable that holds either the user's input or the Nano Bot's output.
+
+Output adapters are only activated when the stream functionality is not enabled.
+
+Regarding input, the prefix, suffix, and any modifications made by the adapter are sent to the bot. If the interaction is not stateless, these elements are also preserved in the state history.
+
+In contrast, for outputs, any changes made by the adapter, prefix, and suffix aren't saved or used in later messages to the bot. These changes are used only for displaying results or for pipeline operations.
 
 ## Providers
 
@@ -489,16 +581,18 @@ These are the default values when the following keys are not specified in the Ca
 ---
 interfaces:
   repl:
-    postfix: "\n"
-    prefix: "\n"
-    stream: true
+    output:
+      stream: true
+      suffix: "\n"
+      prefix: "\n"
     prompt:
       - text: '🤖'
       - text: '> '
         color: blue
   eval:
-    stream: true
-    postfix: "\n"
+    output:
+      stream: true
+      suffix: "\n"
 
 provider:
   settings:
@@ -557,18 +651,63 @@ behaviors:
     instruction: Provide a welcome message.
 
 interfaces:
-  repl:
+  input:
+    prefix: "\n"
+    suffix: "\n"
+    adapter:
+      fennel: |
+        (.. "```" content "```")
+      lua: |
+        "```" .. content .. "```"
+  output:
     stream: true
     prefix: "\n"
-    postfix: "\n"
+    suffix: "\n"
+    adapter:
+      fennel: |
+        (.. "```" content "```")
+      lua: |
+        "```" .. content .. "```"
+  repl:
+    input:
+      prefix: "\n"
+      suffix: "\n"
+      adapter:
+        fennel: |
+          (.. "```" content "```")
+        lua: |
+          "```" .. content .. "```"
+    output:
+      stream: true
+      prefix: "\n"
+      suffix: "\n"
+      adapter:
+        fennel: |
+          (.. "```" content "```")
+        lua: |
+          "```" .. content .. "```"
     prompt:
       - text: '🤖'
       - text: '> '
         color: blue
   eval:
-    stream: true
-    prefix: "\n"
-    postfix: "\n"
+    input:
+      prefix: "\n"
+      suffix: "\n"
+      adapter:
+        fennel: |
+          (.. "```" content "```")
+        lua: |
+          "```" .. content .. "```"
+    output:
+      stream: true
+      prefix: "\n"
+      suffix: "\n"
+      adapter:
+        fennel: |
+          (.. "```" content "```")
+        lua: |
+          "```" .. content .. "```"
 
 state:
   directory: ENV/NANO_BOTS_STATE_DIRECTORY
