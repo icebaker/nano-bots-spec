@@ -31,6 +31,9 @@ provider:
 Here's what a fully-functional implementation of Nano Bots feels like:
 
 ```bash
+nb - - eval "hello"
+# => Hello! How may I assist you today?
+
 nb to-en-us-translator.yml - eval "Salut, comment ça va?"
 # => Hello, how are you doing?
 
@@ -53,6 +56,8 @@ cat article.txt |
 ```
 
 ```bash
+nb - - repl
+
 nb assistant.yml - repl
 ```
 
@@ -374,6 +379,9 @@ Nano Bots can be implemented in any programming language. Typically, implementat
 Here's what a fully-functional implementation of Nano Bots feels like:
 
 ```bash
+nb - - eval "hello"
+# => Hello! How may I assist you today?
+
 nb to-en-us-translator.yml - eval "Salut, comment ça va?"
 # => Hello, how are you doing?
 
@@ -396,6 +404,8 @@ cat article.txt |
 ```
 
 ```bash
+nb - - repl
+
 nb assistant.yml - repl
 ```
 
@@ -493,6 +503,32 @@ interfaces:
 provider:
   settings:
     stream: true
+```
+
+Users may choose not to provide a Cartridge file by using the `-` character:
+
+```sh
+nb - - repl
+nb - - eval "Hi"
+```
+
+Under this circumstance, the implementation should apply the following default Cartridge:
+
+```yaml
+---
+meta:
+  name: Unknown
+  author: Nobody
+  version: 0.0.0
+
+provider:
+  name: openai
+  settings:
+    model: gpt-3.5-turbo
+    credentials:
+      address: ENV/OPENAI_API_ADDRESS
+      access-token: ENV/OPENAI_API_ACCESS_TOKEN
+      user-identifier: ENV/OPENAI_API_USER_IDENTIFIER
 ```
 
 ### Full Specification

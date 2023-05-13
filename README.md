@@ -43,6 +43,9 @@ provider:
 Here's what a fully-functional implementation of Nano Bots feels like:
 
 ```bash
+nb - - eval "hello"
+# => Hello! How may I assist you today?
+
 nb to-en-us-translator.yml - eval "Salut, comment ça va?"
 # => Hello, how are you doing?
 
@@ -65,6 +68,8 @@ cat article.txt |
 ```
 
 ```bash
+nb - - repl
+
 nb assistant.yml - repl
 ```
 
