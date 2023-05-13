@@ -408,7 +408,7 @@ Output adapters are only activated when the stream functionality is not enabled.
 
 Regarding input, the prefix, suffix, and any modifications made by the adapter are sent to the bot. If the interaction is not stateless, these elements are also preserved in the state history.
 
-In contrast, for outputs, any changes made by the adapter, prefix, and suffix aren't saved or used in later messages to the bot. These changes are used only for displaying results or for pipeline operations.
+In contrast, for outputs, any changes made by the adapter, prefix, and suffix aren't saved or used in later messages to the bot. These changes are used only for displaying purposes or for pipeline operations.
 
 ## Providers
 
