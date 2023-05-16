@@ -23,6 +23,7 @@ Here's what a Nano Bot _Cartridge_ looks like:
 ---
 meta:
   name: Nano Bot Name
+  symbol: 🤖
   author: Your Name
   version: 0.0.1
 

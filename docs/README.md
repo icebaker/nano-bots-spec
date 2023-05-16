@@ -11,6 +11,7 @@ Here's what a Nano Bot _Cartridge_ looks like:
 ---
 meta:
   name: Nano Bot Name
+  symbol: 🤖
   author: Your Name
   version: 0.0.1
 
@@ -113,6 +114,7 @@ Here is a minimal sample of a cartridge [YAML](https://yaml.org) file:
 ---
 meta:
   name: Nano Bot Name
+  symbol: 🤖
   author: Your Name
   version: 0.0.1
 
@@ -286,7 +288,7 @@ interfaces:
   repl:
     output:
       prefix: "\n"
-      postfix: "\n"
+      suffix: "\n"
       prompt:
         - text: '🤖'
         - text: '> '
@@ -562,6 +564,7 @@ This is the minimum required Cartridge data:
 ---
 meta:
   name: Nano Bot Name
+  symbol: 🤖
   author: Your Name
   version: 0.0.1
 
@@ -612,6 +615,7 @@ Under this circumstance, the implementation should apply the following default C
 ---
 meta:
   name: Unknown
+  symbol: 🤖
   author: Nobody
   version: 0.0.0
 
@@ -633,6 +637,7 @@ This example showcases all the possible keys present in a Nano Bot Cartridge YAM
 ---
 meta:
   name: Nano Bot Name
+  symbol: 🤖
   author: Your Name
   version: 0.0.1
 
@@ -790,6 +795,7 @@ nb assistant.yml E15D repl
 ---
 meta:
   name: Nano Bot Name
+  symbol: 🤖
   author: Your Name
   version: 0.0.1
 
