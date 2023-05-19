@@ -95,11 +95,17 @@ Together, these components create a fully functional **Nano Bot**:
 Nano Bot = (cartridge.yml + implementation + provider)
 ```
 
-## Projects
+## Implementations
 
 Implementations of this specification:
 
 - Ruby: https://github.com/icebaker/ruby-nano-bots
+
+### Projects
+
+- [Nano Bots API](https://github.com/icebaker/nano-bots-api)
+- [Nano Bots for Sublime Text](https://github.com/icebaker/sublime-nano-bots)
+- [Nano Bots for Visual Studio Code](https://github.com/icebaker/vscode-nano-bots)
 
 # Cartridges
 
