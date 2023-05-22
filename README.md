@@ -18,6 +18,7 @@ Implementations of this specification:
 
 ### Projects
 
+- [Nano Bots Live Editor](https://carecenter.nanobots.icebaker.me)
 - [Nano Bots API](https://github.com/icebaker/nano-bots-api)
 - [Nano Bots for Sublime Text](https://github.com/icebaker/sublime-nano-bots)
 - [Nano Bots for Visual Studio Code](https://github.com/icebaker/vscode-nano-bots)
