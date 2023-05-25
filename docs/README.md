@@ -99,12 +99,13 @@ Nano Bot = (cartridge.yml + implementation + provider)
 
 Implementations of this specification:
 
-- Ruby: https://github.com/icebaker/ruby-nano-bots
+- [Nano Bots CLI (Ruby)](https://github.com/icebaker/ruby-nano-bots)
 
 ### Projects
 
-- [Nano Bots Live Editor](https://carecenter.nanobots.icebaker.me)
+- [Nano Bots Clinic (Live Editor)](https://clinic.nbots.io)
 - [Nano Bots API](https://github.com/icebaker/nano-bots-api)
+  - [Public API](https://api.nbots.io)
 - [Nano Bots for Sublime Text](https://github.com/icebaker/sublime-nano-bots)
 - [Nano Bots for Visual Studio Code](https://github.com/icebaker/vscode-nano-bots)
 
