@@ -31,10 +31,12 @@ Here's what a Nano Bot _Cartridge_ looks like:
 ```yaml
 ---
 meta:
-  name: Nano Bot Name
   symbol: 🤖
+  name: Nano Bot Name
   author: Your Name
-  version: 0.0.1
+  version: 1.0.0
+  license: CC0-1.0
+  description: A helpful assistant.
 
 behaviors:
   interaction:

@@ -7,7 +7,7 @@
 - Effortlessly integrate multiple bots to achieve your goals.
 - Share your Nano Bots and enable others to benefit from their abilities.
 
-Version 0.0.1
+Version 0.1.0
 
 ⚠️ _Warning: Early-stage, breaking changes are expected._
 

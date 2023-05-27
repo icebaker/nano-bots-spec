@@ -10,10 +10,12 @@ Here's what a Nano Bot _Cartridge_ looks like:
 ```yaml
 ---
 meta:
-  name: Nano Bot Name
   symbol: 🤖
+  name: Nano Bot Name
   author: Your Name
-  version: 0.0.1
+  version: 1.0.0
+  license: CC0-1.0
+  description: A helpful assistant.
 
 behaviors:
   interaction:
@@ -121,10 +123,12 @@ Here is a minimal sample of a cartridge [YAML](https://yaml.org) file:
 ```yaml
 ---
 meta:
-  name: Nano Bot Name
   symbol: 🤖
+  name: Nano Bot Name
   author: Your Name
-  version: 0.0.1
+  version: 1.0.0
+  license: CC0-1.0
+  description: A helpful assistant.
 
 behaviors:
   interaction:
@@ -139,6 +143,41 @@ provider:
       access-token: ENV/OPENAI_API_ACCESS_TOKEN
       user-identifier: ENV/OPENAI_API_USER_IDENTIFIER
 ```
+
+## Meta
+
+The `meta:` section provides basic information about the Cartridge.
+
+```yaml
+---
+meta:
+  symbol: 🤖
+  name: Nano Bot Name
+  author: Your Name
+  version: 1.0.0
+  license: CC0-1.0
+  description: A helpful assistant.
+```
+
+`symbol:` is a single [Unicode emoji character](https://home.unicode.org/emoji/about-emoji/).
+
+`name:` and `author:` are single-line text values encouraged to be short.
+
+`version:` must follow [Semantic Versioning 2.0.0](https://semver.org).
+
+`license:` must comply with the [SPDX Identifier](https://spdx.dev/ids/).
+
+`description:` is a brief text that details what to expect from the Nano Bot, encouraged to be concise.
+
+### License
+
+The classification of _prompts_ for Large Language Models as code, art, or intellectual property, as well as their applicability to licensing, intellectual property rights, copyright, or patenting, remain subjects of ongoing and complex debate without a clear answer or definitive understanding at present.
+
+When Nano Bots expand prompt writing into a more detailed scheme and add small pieces of code like [adapters](?id=adapters), the debate becomes even trickier and blurrier.
+
+Due to the complexities of this debate, we recommend that authors publish their creations under licenses. The recommended license, described in the examples, is [CC0-1.0](https://creativecommons.org/publicdomain/zero/1.0/) to avoid confusion regarding the use of your Nano Bots by others. However, any [SPDX known license](https://spdx.org/licenses/) may be chosen.
+
+Please note that we are uncertain if this approach is practical or enforceable, so it should not be considered a guarantee of licensing but rather a statement of your intention.
 
 ## Behaviors
 
@@ -474,6 +513,38 @@ provider:
       # https://platform.openai.com/docs/guides/safety-best-practices/end-user-ids
 ```
 
+## Miscellaneous
+
+```yaml
+---
+miscellaneous:
+  key: value
+```
+
+`miscellaneous:` is an optional key that can hold additional data for purposes other than making the Nano Bot functional. This data may include metadata for marketplaces, educational information, and so on. It's important to note that these keys must be not relevant for the Nano Bot's operation and should be deliberately ignored by implementations.
+
+They can contain any information or structure, as shown in the following examples:
+
+```yaml
+---
+miscellaneous:
+  some-marketplace:
+    background-color: blue
+    tags:
+      - creativity
+      - programming
+```
+
+```yaml
+---
+miscellaneous:
+  some-platform:
+    technique: summarization
+    details: |
+      This Nano Bot exemplifies one of the
+      common approaches to summarizing content.
+```
+
 # Implementations
 
 Nano Bots can be implemented in any programming language. Typically, implementations provide executable binaries capable of interpreting the cartridge YAML file as specified here, correctly interacting with multiple providers, and offering the expected interaction interfaces (_REPL_ and _Eval_).
@@ -571,10 +642,12 @@ This is the minimum required Cartridge data:
 ```yaml
 ---
 meta:
-  name: Nano Bot Name
   symbol: 🤖
+  name: Nano Bot Name
   author: Your Name
-  version: 0.0.1
+  version: 1.0.0
+  license: CC0-1.0
+  description: A helpful assistant.
 
 provider:
   name: openai
@@ -622,10 +695,12 @@ Under this circumstance, the implementation should apply the following default C
 ```yaml
 ---
 meta:
-  name: Unknown
   symbol: 🤖
-  author: Nobody
+  name: Unknown
+  author: None
   version: 0.0.0
+  license: CC0-1.0
+  description: Unknown
 
 provider:
   name: openai
@@ -644,10 +719,12 @@ This example showcases all the possible keys present in a Nano Bot Cartridge YAM
 ```yaml
 ---
 meta:
-  name: Nano Bot Name
   symbol: 🤖
+  name: Nano Bot Name
   author: Your Name
-  version: 0.0.1
+  version: 1.0.0
+  license: CC0-1.0
+  description: A helpful assistant.
 
 behaviors:
   interaction:
@@ -743,6 +820,9 @@ provider:
       access-token: ENV/OPENAI_API_ACCESS_TOKEN
       user-identifier: ENV/OPENAI_API_USER_IDENTIFIER
       # https://platform.openai.com/docs/guides/safety-best-practices/end-user-ids
+
+miscellaneous:
+  key: value
 ```
 
 ## State
@@ -802,10 +882,12 @@ nb assistant.yml E15D repl
 ```yaml
 ---
 meta:
-  name: Nano Bot Name
   symbol: 🤖
+  name: Nano Bot Name
   author: Your Name
-  version: 0.0.1
+  version: 1.0.0
+  license: CC0-1.0
+  description: A helpful assistant.
 
 state:
   directory: /home/user/.local/state/nano-bots
