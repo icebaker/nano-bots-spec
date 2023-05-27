@@ -315,7 +315,6 @@ interfaces:
     prompt:
       - text: '🤖'
       - text: '> '
-        color: blue
 ```
 
 A Read-Eval-Print Loop (REPL) is a streamlined interactive programming environment that allows users to input individual commands, processes them, and returns the results to the user in real-time.
@@ -336,9 +335,9 @@ interfaces:
     output:
       prefix: "\n"
       suffix: "\n"
-      prompt:
-        - text: '🤖'
-        - text: '> '
+    prompt:
+      - text: '🤖'
+      - text: '> '
 ```
 
 ```text
@@ -380,6 +379,27 @@ I am here to make your life easier and more efficient.
 
 🤖> |
 ```
+
+#### Prompt
+
+You can personalize your prompt using an array of texts, with optional color formatting available for each element:
+
+```yaml
+---
+interfaces:
+  repl:
+    prompt:
+      - text: 💀
+      - text: '➜ '
+        color: deeppink
+```
+
+You have the option to utilize [ANSI colors](https://github.com/sickill/rainbow#ansi-colors) such as `blue`, `magenta`, and so on, or [X11 colors](https://github.com/sickill/rainbow#x11-colors) such as `aquamarine`, `deeppink`, and so forth.
+
+The previous fragment would result in the following prompt:
+
+
+> <span>💀</span><span style="color: #ff00af;">➜</span> |
 
 ### Eval
 
@@ -672,7 +692,6 @@ interfaces:
     prompt:
       - text: '🤖'
       - text: '> '
-        color: blue
   eval:
     output:
       stream: true
