@@ -18,6 +18,7 @@ Implementations of this specification:
 
 ### Projects
 
+- [Nano Bots Marketplace](https://nbots.io)
 - [Nano Bots CLI (Ruby)](https://github.com/icebaker/ruby-nano-bots)
 - [Nano Bots Clinic (Live Editor)](https://clinic.nbots.io)
 - [Nano Bots API](https://github.com/icebaker/nano-bots-api)
