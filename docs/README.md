@@ -177,7 +177,8 @@ The classification of _prompts_ for Large Language Models as code, art, or intel
 
 When Nano Bots expand prompt writing into a more detailed scheme and add small pieces of code like [adapters](?id=adapters), the debate becomes even trickier and blurrier.
 
-Due to the complexities of this debate, we recommend that authors publish their creations under licenses. The recommended license, described in the examples, is [CC0-1.0](https://creativecommons.org/publicdomain/zero/1.0/) to avoid confusion regarding the use of your Nano Bots by others. However, any [SPDX known license](https://spdx.org/licenses/) may be chosen.
+Due to the complexities of this debate, we recommend that authors publish their creations under licenses.
+In doubt, in the spirit of openness, sharing, and open source, we recommend the license [CC0-1.0](https://creativecommons.org/publicdomain/zero/1.0/) wich enables commercial exploration of the licensed works and the creation of derivative works without copyleft. However, any [SPDX-known license](https://spdx.org/licenses/) may be chosen.
 
 Please note that we are uncertain if this approach is practical or enforceable, so it should not be considered a guarantee of licensing but rather a statement of your intention.
 
