@@ -12,4 +12,4 @@ Version 0.1.0
 ⚠️ _Warning: Early-stage, breaking changes are expected._
 
 [Specification](README)
-[GitHub](https://github.com/icebaker/nano-bots)
+[GitHub](https://github.com/icebaker/nano-bots-spec)
