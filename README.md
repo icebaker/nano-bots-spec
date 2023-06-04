@@ -45,13 +45,13 @@ behaviors:
     directive: You are a helpful assistant.
 
 provider:
-  name: openai
+  id: openai
+  credentials:
+    address: ENV/OPENAI_API_ADDRESS
+    access-token: ENV/OPENAI_API_KEY
   settings:
+    user: ENV/NANO_BOTS_END_USER
     model: gpt-3.5-turbo
-    credentials:
-      address: ENV/OPENAI_API_ADDRESS
-      access-token: ENV/OPENAI_API_ACCESS_TOKEN
-      user-identifier: ENV/OPENAI_API_USER_IDENTIFIER
 ```
 
 Here's what a fully-functional implementation of Nano Bots feels like:

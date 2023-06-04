@@ -22,13 +22,13 @@ behaviors:
     directive: You are a helpful assistant.
 
 provider:
-  name: openai
+  id: openai
+  credentials:
+    address: ENV/OPENAI_API_ADDRESS
+    access-token: ENV/OPENAI_API_KEY
   settings:
+    user: ENV/NANO_BOTS_END_USER
     model: gpt-3.5-turbo
-    credentials:
-      address: ENV/OPENAI_API_ADDRESS
-      access-token: ENV/OPENAI_API_ACCESS_TOKEN
-      user-identifier: ENV/OPENAI_API_USER_IDENTIFIER
 ```
 
 Here's what a fully-functional implementation of Nano Bots feels like:
@@ -137,13 +137,13 @@ behaviors:
     directive: You are a helpful assistant.
 
 provider:
-  name: openai
+  id: openai
+  credentials:
+    address: ENV/OPENAI_API_ADDRESS
+    access-token: ENV/OPENAI_API_KEY
   settings:
+    user: ENV/NANO_BOTS_END_USER
     model: gpt-3.5-turbo
-    credentials:
-      address: ENV/OPENAI_API_ADDRESS
-      access-token: ENV/OPENAI_API_ACCESS_TOKEN
-      user-identifier: ENV/OPENAI_API_USER_IDENTIFIER
 ```
 
 ## Meta
@@ -488,27 +488,27 @@ Nano Bots should be **provider-agnostic**, which means that the same Nano Bot sh
 
 Examples of popular providers include: [Vicuna](https://github.com/lm-sys/FastChat), [Open AI](https://platform.openai.com/docs/api-reference), [Google PaLM](https://developers.generativeai.google), [Alpaca](https://github.com/tatsu-lab/stanford_alpaca), and [LLaMA](https://github.com/facebookresearch/llama).
 
-The `provider:` section of the cartridge should specify the provider's `name`, followed by a `settings` section containing relevant information that enables the Nano Bot to interact with the provider, adhering to the provider's API expected settings.
+The `provider:` section of the Cartridge must specify the `id` of the provider, followed by a `credentials` and a `settings` section that includes appropriate information for allowing the Nano Bot to communicate successfully with the provider while adhering to the provider's expected API schema.
 
 Minimal sample of a provider section:
 
 ```yaml
 ---
 provider:
-  name: openai
+  id: openai
+  credentials:
+    address: ENV/OPENAI_API_ADDRESS
+    access-token: ENV/OPENAI_API_KEY
   settings:
+    user: ENV/NANO_BOTS_END_USER
     model: gpt-3.5-turbo
-    credentials:
-      address: ENV/OPENAI_API_ADDRESS
-      access-token: ENV/OPENAI_API_ACCESS_TOKEN
-      user-identifier: ENV/OPENAI_API_USER_IDENTIFIER
 ```
 
 ### Credentials
 
 Although it is possible to set credentials directly in the cartridge YAML, it is important to consider that cartridges may be widely shared, and exposing your credentials poses a security risk. Therefore, it is recommended to use environment variables for credentials.
 
-Implementations should apply the regular expression `^ENV.` and replace data with prefixes like `ENV/` or `ENV-` with the corresponding environment variable value. For example, `ENV/OPENAI_API_ACCESS_TOKEN` should load the environment variable `OPENAI_API_ACCESS_TOKEN`.
+Implementations should apply the regular expression `^ENV.` and replace data with prefixes like `ENV/` or `ENV-` with the corresponding environment variable value. For example, `ENV/OPENAI_API_KEY` should load the environment variable `OPENAI_API_KEY`.
 
 ### Open AI
 
@@ -517,8 +517,12 @@ API Documentation: https://platform.openai.com/docs/api-reference
 ```yaml
 ---
 provider:
-  name: openai
+  id: openai
+  credentials:
+    address: ENV/OPENAI_API_ADDRESS
+    access-token: ENV/OPENAI_API_KEY
   settings:
+    user: ENV/NANO_BOTS_END_USER
     model: gpt-3.5-turbo
     stream: true
     temperature: 1
@@ -529,11 +533,6 @@ provider:
     presence_penalty: 0
     frequency_penalty: 0
     logit_bias: null
-    credentials:
-      address: ENV/OPENAI_API_ADDRESS
-      access-token: ENV/OPENAI_API_ACCESS_TOKEN
-      user-identifier: ENV/OPENAI_API_USER_IDENTIFIER
-      # https://platform.openai.com/docs/guides/safety-best-practices/end-user-ids
 ```
 
 ## Miscellaneous
@@ -673,13 +672,13 @@ meta:
   description: A helpful assistant.
 
 provider:
-  name: openai
+  id: openai
+  credentials:
+    address: ENV/OPENAI_API_ADDRESS
+    access-token: ENV/OPENAI_API_KEY
   settings:
+    user: ENV/NANO_BOTS_END_USER
     model: gpt-3.5-turbo
-    credentials:
-      address: ENV/OPENAI_API_ADDRESS
-      access-token: ENV/OPENAI_API_ACCESS_TOKEN
-      user-identifier: ENV/OPENAI_API_USER_IDENTIFIER
 ```
 
 These are the default values when the following keys are not specified in the Cartridge file:
@@ -725,13 +724,13 @@ meta:
   description: Unknown
 
 provider:
-  name: openai
+  id: openai
+  credentials:
+    address: ENV/OPENAI_API_ADDRESS
+    access-token: ENV/OPENAI_API_KEY
   settings:
+    user: ENV/NANO_BOTS_END_USER
     model: gpt-3.5-turbo
-    credentials:
-      address: ENV/OPENAI_API_ADDRESS
-      access-token: ENV/OPENAI_API_ACCESS_TOKEN
-      user-identifier: ENV/OPENAI_API_USER_IDENTIFIER
 ```
 
 ### Full Specification
@@ -825,8 +824,12 @@ state:
   directory: ENV/NANO_BOTS_STATE_DIRECTORY
 
 provider:
-  name: openai
+  id: openai
+  credentials:
+    address: ENV/OPENAI_API_ADDRESS
+    access-token: ENV/OPENAI_API_KEY
   settings:
+    user: ENV/NANO_BOTS_END_USER
     model: gpt-3.5-turbo
     stream: true
     temperature: 1
@@ -837,11 +840,6 @@ provider:
     presence_penalty: 0
     frequency_penalty: 0
     logit_bias: null
-    credentials:
-      address: ENV/OPENAI_API_ADDRESS
-      access-token: ENV/OPENAI_API_ACCESS_TOKEN
-      user-identifier: ENV/OPENAI_API_USER_IDENTIFIER
-      # https://platform.openai.com/docs/guides/safety-best-practices/end-user-ids
 
 miscellaneous:
   key: value
