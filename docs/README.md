@@ -904,19 +904,29 @@ nb assistant.yml E15D repl
 meta:
   symbol: 🤖
   name: Nano Bot Name
-  author: Your Name
+  author: Author Name
   version: 1.0.0
   license: CC0-1.0
   description: A helpful assistant.
 
 state:
   directory: /home/user/.local/state/nano-bots
+
+provider:
+  settings:
+    user: end-user-name
 ```
 
 The state should be stored in a path similar to this:
 
 ```text
-/home/user/.local/state/nano-bots/your-implementation/your-name/nano-bot-name/0-0-1/E15D/state.json
+/home/user/.local/state/nano-bots/your-implementation/author-name/nano-bot-name/0-0-1/end-user-name/E15D/state.json
+```
+
+If not specified in the provider settings, `end-user-name` should be loaded from the environment variable `NANO_BOTS_END_USER`. If the environment variable does not exist, use the default `unknown` value:
+
+```text
+/home/user/.local/state/nano-bots/your-implementation/author-name/nano-bot-name/0-0-1/unknown/E15D/state.json
 ```
 
 JSON is merely an example; each implementation can choose the most suitable data format to work with.
