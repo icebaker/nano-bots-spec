@@ -623,7 +623,7 @@ interfaces:
 
 Adapters are simple and small pieces of code that can manipulate inputs and outputs. Implementations should support two languages for adapters: [Lua](https://www.lua.org/about.html) and [Fennel](https://fennel-lang.org). 
 
-Both languages are simple, extremely lightweight, and fast. They are widely available and supported by multiple platforms and operating systems, and can be easily embedded into any programming language.
+These languages were chosen for their proven portability, widespread availability, lightweight nature, and ease of embedding. They are small, simple, fast, and support multiple platforms across various operating systems. Additionally, they can be seamlessly integrated into numerous other programming languages.
 
 ```yaml
 ---
@@ -699,6 +699,8 @@ adapter:
 Tools (Functions) are powerful means to extend the capabilities of Nano Bots. Just as humans can amplify their capabilities with access to tools such as a wrench, a calculator, or internet access, a Nano Bot can enhance its capabilities when equipped with appropriate tools.
 
 The definition of a tool includes a piece of code that embodies the function behind the tool and a specification that enables providers to become aware of the tool's availability and to reason about when and how to properly request its execution.
+
+The tools' source code is written in [Lua](https://www.lua.org/about.html) or [Fennel](https://fennel-lang.org), chosen for their proven portability, widespread availability, lightweight nature, and ease of embedding. They are small, simple, fast, and support multiple platforms across various operating systems. Additionally, they can be seamlessly integrated into numerous other programming languages.
 
 As an example, this tool provides a random number generator for the Nano Bot:
 
@@ -1141,6 +1143,38 @@ interfaces:
         (.. "```" content "```")
       lua: |
         return "```" .. content .. "```"
+  tools:
+    confirming:
+      yeses: ['y', 'yes']
+      default: 'n'
+      prefix: "\n"
+      suffix: " [yN] > "
+      color: orangered
+      adapter:
+        fennel: |
+          (.. name " | " parameters-as-json)
+        lua: |
+          return name .. " | " .. parameters_as_json
+    executing:
+      feedback: true
+      prefix: "\n"
+      suffix: "\n"
+      color: olive
+      adapter:
+        fennel: |
+          (.. name " | " parameters-as-json)
+        lua: |
+          return name .. " | " .. parameters_as_json
+    responding:
+      feedback: true
+      color: aqua
+      prefix: "\n"
+      suffix: "\n\n"
+      adapter:
+        fennel: |
+          (.. name " | " parameters-as-json "\n" output)
+        lua: |
+          return name .. " | " .. parameters_as_json .. "\n" .. output
   repl:
     input:
       prefix: "\n"
@@ -1164,6 +1198,38 @@ interfaces:
       - text: '🤖'
       - text: '> '
         color: blue
+    tools:
+      confirming:
+        yeses: ['y', 'yes']
+        default: 'n'
+        prefix: "\n"
+        suffix: " [yN] > "
+        color: orangered
+        adapter:
+          fennel: |
+            (.. name " | " parameters-as-json)
+          lua: |
+            return name .. " | " .. parameters_as_json
+      executing:
+        feedback: true
+        prefix: "\n"
+        suffix: "\n"
+        color: olive
+        adapter:
+          fennel: |
+            (.. name " | " parameters-as-json)
+          lua: |
+            return name .. " | " .. parameters_as_json
+      responding:
+        feedback: true
+        color: aqua
+        prefix: "\n"
+        suffix: "\n\n"
+        adapter:
+          fennel: |
+            (.. name " | " parameters-as-json "\n" output)
+          lua: |
+            return name .. " | " .. parameters_as_json .. "\n" .. output
   eval:
     input:
       prefix: "\n"
@@ -1183,9 +1249,47 @@ interfaces:
           (.. "```" content "```")
         lua: |
           return "```" .. content .. "```"
+    tools:
+      confirming:
+        yeses: ['y', 'yes']
+        default: 'n'
+        prefix: "\n"
+        suffix: " [yN] > "
+        color: orangered
+        adapter:
+          fennel: |
+            (.. name " | " parameters-as-json)
+          lua: |
+            return name .. " | " .. parameters_as_json
+      executing:
+        feedback: true
+        prefix: "\n"
+        suffix: "\n"
+        color: olive
+        adapter:
+          fennel: |
+            (.. name " | " parameters-as-json)
+          lua: |
+            return name .. " | " .. parameters_as_json
+      responding:
+        feedback: true
+        color: aqua
+        prefix: "\n"
+        suffix: "\n\n"
+        adapter:
+          fennel: |
+            (.. name " | " parameters-as-json "\n" output)
+          lua: |
+            return name .. " | " .. parameters_as_json .. "\n" .. output
 
 state:
   directory: ENV/NANO_BOTS_STATE_DIRECTORY
+
+safety:
+  functions:
+    sandboxed: true
+  tools:
+    confirmable: true
 
 provider:
   id: openai
@@ -1327,3 +1431,21 @@ lua: |
 ```
 
 This decision was made to support complex multiline Lua functions. Without explicit `return` statements, implementations would need to infer where to inject the `return` statement to create valid Lua code, which could potentially compromise the functionality of the code through incorrect assumptions.
+
+# Experimental
+
+## Clojure Support
+
+We are exploring the use of [Clojure](https://clojure.org) through [Babashka](https://babashka.org), powered by [GraalVM](https://www.graalvm.org).
+
+Currently, [Lua](https://www.lua.org/about.html) and [Fennel](https://fennel-lang.org) are our primary supported languages, due to their proven portability, widespread availability, lightweight nature, and ease of embedding. If this specific flavor of Clojure continues to demonstrate the potential to offer the same attributes as observed in Lua and Fennel, it may become an additional language that is expected to be supported in our specification. Regardless of this potential move, we have absolutely no intention of removing or replacing Lua or Fennel as the primary supported languages.
+
+The experimental support for Clojure would be similar to Lua and Fennel, using the `clojure:` key:
+
+```yaml
+---
+clojure: |
+  (-> (java.time.ZonedDateTime/now)
+      (.format (java.time.format.DateTimeFormatter/ofPattern "yyyy-MM-dd HH:mm"))
+      (clojure.string/trimr))
+```
