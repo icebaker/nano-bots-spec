@@ -96,7 +96,7 @@ well. How can I assist you?
 🤖> |
 ```
 
-Nano Bots can also be powered by _Tools_ (functions):
+Nano Bots can also be powered by _Tools_ (Functions):
 
 ```yaml
 ---
