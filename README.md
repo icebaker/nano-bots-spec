@@ -96,4 +96,28 @@ well. How can I assist you?
 🤖> |
 ```
 
+Nano Bots can also be powered by _Tools_ (functions):
+
+```yaml
+---
+tools:
+  - name: random-number
+    description: Generates a random number between 1 and 100.
+    fennel: |
+      (math.random 1 100)
+```
+
+```
+🤖> please generate a random number
+
+random-number {} [yN] y
+
+random-number {}
+59
+
+The randomly generated number is 59.
+
+🤖> |
+```
+
 Check out the full specification for Nano Bots: https://spec.nbots.io
