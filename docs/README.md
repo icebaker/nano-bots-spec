@@ -264,11 +264,46 @@ behaviors:
 
 An `instruction` is a clear and concise directive given to the bot, intended to guide it in performing a particular action or task.
 
+## Safety
+
+The `safety:` section provides safety configurations:
+
+```yaml
+---
+safety:
+  functions:
+    sandboxed: true
+  tools:
+    confirmable: true
+```
+
+### Functions
+
+The key `sandboxed:` within `functions:` defines that any function executed by the Nano Bot, whether it's an _adapter_ or a _tool_, should be _sandboxed_. This implies that it is expected to have limited functionality and operate within an isolated environment. Consequently, it should not be capable of performing actions such as accessing the internet, manipulating disk files, or accessing the user's computer operating system and environment. When set to `false`, functions may potentially have unrestricted access to all of these capabilities.
+
+```yaml
+---
+safety:
+  functions:
+    sandboxed: true
+```
+
+### Tools
+
+The key `confirmable:` within `tools:` specifies that any tool (function) execution request that the Nano Bot wants to run should not be executed until the user confirms that they allow the function to be executed. When set to `false`, the Nano Bot should freely run any available tool without confirmation.
+
+```yaml
+---
+safety:
+  tools:
+    confirmable: true
+```
+
 ## Interfaces
 
 Implementations should support two possible interaction interfaces: REPL and Eval.
 
-You can customize both the _input_ and _output_ with prefixes, suffixes, and adapters for all interfaces:
+You can customize both the _input_ and _output_ with prefixes, suffixes, colors, and adapters for all interfaces. Additionally, the feedback loop involved in the execution of tools (functions) can be customized.
 
 ```yaml
 ---
@@ -280,16 +315,49 @@ interfaces:
       fennel: |
         (.. "```" content "```")
       lua: |
-        "```" .. content .. "```"
+        return "```" .. content .. "```"
   output:
     stream: true
     prefix: "\n"
     suffix: "\n"
+    color: cyan
     adapter:
       fennel: |
         (.. "```" content "```")
       lua: |
-        "```" .. content .. "```"
+        return "```" .. content .. "```"
+  tools:
+    confirming:
+      yeses: ['y', 'yes']
+      default: 'n'
+      prefix: "\n"
+      suffix: " [yN] > "
+      color: orangered
+      adapter:
+        fennel: |
+          (.. name " | " parameters-as-json)
+        lua: |
+          return name .. " | " .. parameters_as_json
+    executing:
+      feedback: true
+      prefix: "\n"
+      suffix: "\n"
+      color: olive
+      adapter:
+        fennel: |
+          (.. name " | " parameters-as-json)
+        lua: |
+          return name .. " | " .. parameters_as_json
+    responding:
+      feedback: true
+      color: aqua
+      prefix: "\n"
+      suffix: "\n\n"
+      adapter:
+        fennel: |
+          (.. name " | " parameters-as-json "\n" output)
+        lua: |
+          return name .. " | " .. parameters_as_json .. "\n" .. output
 ```
 
 ### REPL
@@ -305,19 +373,22 @@ interfaces:
         fennel: |
           (.. "```" content "```")
         lua: |
-          "```" .. content .. "```"
+          return "```" .. content .. "```"
     output:
       stream: true
       prefix: "\n"
       suffix: "\n"
+      color: aqua
       adapter:
         fennel: |
           (.. "```" content "```")
         lua: |
-          "```" .. content .. "```"
+          return "```" .. content .. "```"
     prompt:
       - text: '🤖'
       - text: '> '
+    tools:
+
 ```
 
 A Read-Eval-Print Loop (REPL) is a streamlined interactive programming environment that allows users to input individual commands, processes them, and returns the results to the user in real-time.
@@ -417,16 +488,19 @@ interfaces:
         fennel: |
           (.. "```" content "```")
         lua: |
-          "```" .. content .. "```"
+          return "```" .. content .. "```"
     output:
       stream: true
       prefix: "\n"
       suffix: "\n"
+      color: olive
       adapter:
         fennel: |
           (.. "```" content "```")
         lua: |
-          "```" .. content .. "```"
+          return "```" .. content .. "```"
+    tools:
+
 ```
 
 Eval (short for evaluation) refers to single-turn executions of the Nano Bot that, when given an input, produce an output.
@@ -454,11 +528,102 @@ The average distance from the Earth to the Moon
 is about 238,855 miles (384,400 kilometers).
 ```
 
+### Tools (Functions)
+
+This section allows customization of the feedback loop involved in executing tools (functions).
+
+```yaml
+---
+interfaces:
+  tools:
+    confirming:
+    executing:
+    responding:
+
+```
+
+#### Confirming
+
+When _tools (functions)_ are defined as _confirmable_ in the [safety](?id=safety) section, we can customize how the user is prompted to confirm that the Nano Bot is allowed to execute them.
+
+The key `yeses` defines answers that are considered as affirmative confirmations by the user, thereby allowing the Nano Bot to execute the tool (function). Implementations should treat answers as case-insensitive. This means that if "yes" is included in `yeses`, then "Yes," "YES," and any other case variations of "yes" should also be recognized as confirmation. Anything that does not match the `yeses` values should be interpreted as the user not confirming/allowing the execution.
+
+The `default` key defines what should be considered the default answer for when the user provides an empty answer, such as just pressing _Enter_ without typing anything.
+
+The keys `prefix`, `suffix`, `color`, and `adapter` can be used to customize the output when prompting the user for an answer.
+
+The `adapter:` environment and available values are described in the section [Adapters](?id=adapters).
+
+```yaml
+---
+interfaces:
+  tools:
+    confirming:
+      yeses: ['y', 'yes']
+      default: 'n'
+      prefix: "\n"
+      suffix: " [yN] > "
+      color: orangered
+      adapter:
+        fennel: |
+          (.. name " | " parameters-as-json)
+        lua: |
+          return name .. " | " .. parameters_as_json
+```
+
+#### Executing
+
+The key `feedback` determines whether interfaces should provide feedback when the Nano Bot **starts** the execution of a tool (function). When set to `false`, no feedback should be provided, and the other keys should be ignored.
+
+The keys `prefix`, `suffix`, `color`, and `adapter` can be used to customize the output when informing the user about the start of execution.
+
+The `adapter:` environment and available values are described in the section [Adapters](?id=adapters).
+
+```yaml
+---
+interfaces:
+  tools:
+    executing:
+      feedback: false
+      suffix: "\n"
+      suffix: "\n"
+      color: olive
+      adapter:
+        fennel: |
+          (.. name " | " parameters-as-json)
+        lua: |
+          return name .. " | " .. parameters_as_json
+```
+
+#### Responding
+
+The key `feedback:` determines whether interfaces should provide feedback when the Nano Bot **completes** the execution of a tool (function). When set to `false`, no feedback should be provided, and the other keys should be ignored.
+
+The keys `prefix`, `suffix`, `color`, and `adapter` can be used to customize the output when informing the user about a received response from a tool (function) execution completion.
+
+The `adapter:` environment and available values are described in the section [Adapters](?id=adapters).
+
+```yaml
+---
+interfaces:
+  tools:
+    responding:
+      feedback: true
+      color: aqua
+      prefix: "\n"
+      suffix: "\n\n"
+      adapter:
+        fennel: |
+          (.. name " | " parameters-as-json "\n" output)
+        lua: |
+          return name .. " | " .. parameters_as_json .. "\n" .. output
+```
+
 ### Adapters
 
 Adapters are simple and small pieces of code that can manipulate inputs and outputs. Implementations should support two languages for adapters: [Lua](https://www.lua.org/about.html) and [Fennel](https://fennel-lang.org). 
 
-Both languages are simple, extremely lightweight, and fast. They are widely available and supported by multiple platforms and operating systems, and can be easily embedded into any programming language.
+These languages were chosen for their proven portability, widespread availability, lightweight nature, and ease of embedding. They are small, simple, fast, and support multiple platforms across various operating systems. Additionally, they can be seamlessly integrated into numerous other programming languages.
 
 ```yaml
 ---
@@ -471,16 +636,198 @@ adapter:
 ---
 adapter:
   lua: |
-    "```" .. content .. "```"
+    return "```" .. content .. "```"
 ```
 
-Adapters have access to a `content` variable that holds either the user's input or the Nano Bot's output.
+An important note on the use of adapters: They should return a value that the implementation can use to properly print on appropriate interfaces. This means that actions such as calling _print_ functions should not occur inside adapters.
+
+The values available within each adapter enviroment will depend on the context of the adapter.
+
+#### REPL and Eval
+
+REPL and Eval inside `interfaces:` have `input:` and `output:` keys with support for adapters. In this context, they will have a `content` value available that holds either the user's input or the Nano Bot's output:
+
+```yaml
+---
+adapter:
+  fennel: |
+    (.. "```" content "```")
+  lua: |
+    return "```" .. content .. "```"
+```
 
 Output adapters are only activated when the stream functionality is not enabled.
 
 Regarding input, the prefix, suffix, and any modifications made by the adapter are sent to the bot. If the interaction is not stateless, these elements are also preserved in the state history.
 
 In contrast, for outputs, any changes made by the adapter, prefix, and suffix aren't saved or used in later messages to the bot. These changes are used only for displaying purposes or for pipeline operations.
+
+#### Tools (Functions)
+
+All adapters related to `tools:` will have access to the following values:
+
+| Name                 | Value                                               |
+|---------------------:|-----------------------------------------------------|
+| `id`                 | Identification of the specific execution.           |
+| `name`               | The name of the tool.                               |
+| `parameters`         | The parameters values for the tool execution.       |
+| `parameters-as-json` | The parameters values represented as a JSON string. |
+| `output`             | The resulting response from the execution.          |
+
+```yaml
+---
+adapter:
+  fennel: |
+    (.. id " | " name " | " parameters-as-json "\n" output)
+  lua: |
+    return id .. " | " name .. " | " .. parameters_as_json .. "\n" .. output
+```
+
+Note that, following language conventions and syntax, Lua uses `parameters_as_json` instead.
+
+For simple inspection purposes, the `parameters-as-json` value is available, so there is no need to parse potentially complex nested structures just to inspect the parameters. However, the original parameters remain accessible:
+
+```yaml
+---
+adapter:
+  fennel: |
+    (fenne.view parameters)
+```
+
+## Tools (Functions)
+
+Tools (Functions) are powerful means to extend the capabilities of Nano Bots. Just as humans can amplify their capabilities with access to tools such as a wrench, a calculator, or internet access, a Nano Bot can enhance its capabilities when equipped with appropriate tools.
+
+The definition of a tool includes a piece of code that embodies the function behind the tool and a specification that enables providers to become aware of the tool's availability and to reason about when and how to properly request its execution.
+
+The tools' source code is written in [Lua](https://www.lua.org/about.html) or [Fennel](https://fennel-lang.org), chosen for their proven portability, widespread availability, lightweight nature, and ease of embedding. They are small, simple, fast, and support multiple platforms across various operating systems. Additionally, they can be seamlessly integrated into numerous other programming languages.
+
+As an example, this tool provides a random number generator for the Nano Bot:
+
+```yaml
+---
+tools:
+  - name: random-number
+    description: Generates a random number between 1 and 100.
+    fennel: |
+      (math.random 1 100)
+```
+
+`name:` is the identifier name for the function behind the tool. The `description:` helps the Nano Bot understand the purpose of the tool so it can reason about when to properly use it. `fennel:` provides the source code for the function. Like adapters, you could use `lua:` instead:
+
+```yaml
+---
+tools:
+  - name: random-number
+    description: Generates a random number between 1 and 100.
+    lua: |
+      return math.random(1, 100)
+```
+
+This is what a REPL execution of a Nano Bot powered by this tool would look like:
+```text
+🤖> generate a random number
+
+random-number {} [yN] y
+
+random-number {}
+39
+
+The random number generated is 39.
+```
+
+### Parameters
+
+A tool may expect parameters. Parameters are described following the [JSON Schema](https://json-schema.org) specification:
+
+```yaml
+---
+tools:
+  - name: random-number
+    description: Generates a random number within a given range.
+    parameters:
+      type: object
+      properties:
+        from:
+          type: integer
+          description: The minimum expected number for random generation.
+        to:
+          type: integer
+          description: The maximum expected number for random generation.
+      required:
+        - from
+        - to
+    fennel: |
+      (let [{ : from : to } parameters]
+        (math.random from to))
+```
+
+Note that the function now has access to `parameters`. The same should be true for Lua source code:
+
+```yaml
+---
+tools:
+  - name: random-number
+    description: Generates a random number within a given range.
+    parameters:
+      type: object
+      properties:
+        from:
+          type: integer
+          description: The minimum expected number for random generation.
+        to:
+          type: integer
+          description: The maximum expected number for random generation.
+      required:
+        - from
+        - to
+    lua: |
+      return math.random(parameters['from'], parameters['to'])
+```
+
+This is what a REPL execution of a Nano Bot powered by this tool would look like:
+
+```text
+🤖> generate a random number between 15 and 25
+
+random-number {"from":15,"to":25} [yN] y
+
+random-number {"from":15,"to":25}
+21
+
+The random number generated between 15 and 25 is 21.
+```
+
+### Safety
+
+By default, executions are [sandboxed](?id=functions) and [confirmable](?id=tools), meaning they will not have access to potentially dangerous operations such as accessing the user's computer operating system, executing commands with access to disk files, or performing requests to the internet, and they will not be executed without confirmation from the user.
+
+You can change this behavior by [disabling the safety configurations](?id=safety). A non-sandboxed tool may have powers, such as the ability to access information from the users' computers.
+
+```yaml
+---
+tools:
+  - name: what-time-is-it
+      description: Returns the current date and time.
+      fennel: |
+        (os.date)
+```
+
+This level of access would allow aslo the execution of [system calls](https://en.wikipedia.org/wiki/System_call), meaning that the source could hipotetically does anything it wants in the operation system. The are two words of cautions here:
+
+#### Predictability
+
+As the execution requests for the tools are generated by the Nano Bot through providers, their outcomes are unpredictable, meaning that when not sandboxed and with a function that offers this possibility, they may perform unexpected [system calls](https://en.wikipedia.org/wiki/System_call), which could be dangerous, especially without confirmability.
+
+As execution requests for the tools are generated by the Nano Bot through providers, their outcomes are unpredictable. This means that without being sandboxed and having a function that offers this possibility, they may perform unexpected [system calls](https://en.wikipedia.org/wiki/System_call), which could be dangerous, especially without [confirmability](?id=tools).
+
+#### Portability
+
+Without being sandboxed and having a function that offers the possibility of _system calls_, you may achieve unlimited powers regarding what a Nano Bot can do. However, you may start to go against the Nano Bot principle of portability, where:
+
+> _A Cartridge YAML file should ultimately be the sole and only necessary information for the bot to operate as expected._
+
+If you create a Nano Bot that performs a system call to locally installed software, which in turn depends on a local database, you may end up creating a non-portable Nano Bot. Such a Nano Bot could not be used by another user who only has the Cartridge YAML file without proper additional instructions and an extended setup process.
 
 ## Providers
 
@@ -685,6 +1032,12 @@ These are the default values when the following keys are not specified in the Ca
 
 ```yaml
 ---
+safety:
+  functions:
+    sandboxed: true
+  tools:
+    confirmable: true
+
 interfaces:
   repl:
     output:
@@ -698,6 +1051,16 @@ interfaces:
     output:
       stream: true
       suffix: "\n"
+  tools:
+    confirming:
+      suffix: ' [yN] '
+      default: 'n'
+      yeses: ['y', 'yes']
+    executing:
+      feedback: false
+    responding:
+      suffix: "\n\n"
+      feedback: true
 
 provider:
   settings:
@@ -769,16 +1132,49 @@ interfaces:
       fennel: |
         (.. "```" content "```")
       lua: |
-        "```" .. content .. "```"
+        return "```" .. content .. "```"
   output:
     stream: true
     prefix: "\n"
     suffix: "\n"
+    color: aqua
     adapter:
       fennel: |
         (.. "```" content "```")
       lua: |
-        "```" .. content .. "```"
+        return "```" .. content .. "```"
+  tools:
+    confirming:
+      yeses: ['y', 'yes']
+      default: 'n'
+      prefix: "\n"
+      suffix: " [yN] > "
+      color: orangered
+      adapter:
+        fennel: |
+          (.. name " | " parameters-as-json)
+        lua: |
+          return name .. " | " .. parameters_as_json
+    executing:
+      feedback: true
+      prefix: "\n"
+      suffix: "\n"
+      color: olive
+      adapter:
+        fennel: |
+          (.. name " | " parameters-as-json)
+        lua: |
+          return name .. " | " .. parameters_as_json
+    responding:
+      feedback: true
+      color: aqua
+      prefix: "\n"
+      suffix: "\n\n"
+      adapter:
+        fennel: |
+          (.. name " | " parameters-as-json "\n" output)
+        lua: |
+          return name .. " | " .. parameters_as_json .. "\n" .. output
   repl:
     input:
       prefix: "\n"
@@ -787,20 +1183,53 @@ interfaces:
         fennel: |
           (.. "```" content "```")
         lua: |
-          "```" .. content .. "```"
+          return "```" .. content .. "```"
     output:
       stream: true
       prefix: "\n"
       suffix: "\n"
+      color: olive
       adapter:
         fennel: |
           (.. "```" content "```")
         lua: |
-          "```" .. content .. "```"
+          return "```" .. content .. "```"
     prompt:
       - text: '🤖'
       - text: '> '
         color: blue
+    tools:
+      confirming:
+        yeses: ['y', 'yes']
+        default: 'n'
+        prefix: "\n"
+        suffix: " [yN] > "
+        color: orangered
+        adapter:
+          fennel: |
+            (.. name " | " parameters-as-json)
+          lua: |
+            return name .. " | " .. parameters_as_json
+      executing:
+        feedback: true
+        prefix: "\n"
+        suffix: "\n"
+        color: olive
+        adapter:
+          fennel: |
+            (.. name " | " parameters-as-json)
+          lua: |
+            return name .. " | " .. parameters_as_json
+      responding:
+        feedback: true
+        color: aqua
+        prefix: "\n"
+        suffix: "\n\n"
+        adapter:
+          fennel: |
+            (.. name " | " parameters-as-json "\n" output)
+          lua: |
+            return name .. " | " .. parameters_as_json .. "\n" .. output
   eval:
     input:
       prefix: "\n"
@@ -809,19 +1238,58 @@ interfaces:
         fennel: |
           (.. "```" content "```")
         lua: |
-          "```" .. content .. "```"
+          return "```" .. content .. "```"
     output:
       stream: true
       prefix: "\n"
       suffix: "\n"
+      color: magenta
       adapter:
         fennel: |
           (.. "```" content "```")
         lua: |
-          "```" .. content .. "```"
+          return "```" .. content .. "```"
+    tools:
+      confirming:
+        yeses: ['y', 'yes']
+        default: 'n'
+        prefix: "\n"
+        suffix: " [yN] > "
+        color: orangered
+        adapter:
+          fennel: |
+            (.. name " | " parameters-as-json)
+          lua: |
+            return name .. " | " .. parameters_as_json
+      executing:
+        feedback: true
+        prefix: "\n"
+        suffix: "\n"
+        color: olive
+        adapter:
+          fennel: |
+            (.. name " | " parameters-as-json)
+          lua: |
+            return name .. " | " .. parameters_as_json
+      responding:
+        feedback: true
+        color: aqua
+        prefix: "\n"
+        suffix: "\n\n"
+        adapter:
+          fennel: |
+            (.. name " | " parameters-as-json "\n" output)
+          lua: |
+            return name .. " | " .. parameters_as_json .. "\n" .. output
 
 state:
   directory: ENV/NANO_BOTS_STATE_DIRECTORY
+
+safety:
+  functions:
+    sandboxed: true
+  tools:
+    confirmable: true
 
 provider:
   id: openai
@@ -873,7 +1341,7 @@ nb assistant.yml D9D6 eval "Hi"
 
 In this example, both `E15D` and `D9D6` are distinct identifiers used to indicate which state key should be employed for storing and retrieving state information related to that interaction.
 
-In this scenario, both Eval and REPL store their states (history) and should be capable of performing multi-turn interactions. Eval will remember its previous interactions, and a REPL will remember its previous interactions even if it is exited and started again.
+In this scenario, both Eval and REPL store their states (history) and should be capable of performing multi-turn interactions. Eval should remember its previous interactions, and a REPL should remember its previous interactions even if it is exited and started again.
 
 By default, implementations should be [XDG compliant](https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html), which means that the default storage path would be:
 
@@ -883,7 +1351,7 @@ By default, implementations should be [XDG compliant](https://specifications.fre
 
 If the `NANO_BOTS_STATE_DIRECTORY` environment variable exists, it should be used as the directory to store the states.
 
-A Cartridge may include a section that defines a custom directory for storing the states. In this case, it will override both the default and the path specified by the environment variable:
+A Cartridge may include a section that defines a custom directory for storing the states. In this case, it should override both the default and the path specified by the environment variable:
 
 ```yaml
 ---
@@ -938,3 +1406,46 @@ States serve as a convenience for users and should not be used to influence Nano
 ## Stream
 
 Unless otherwise specified in the Cartridge file, or if not supported by the provider, both the REPL and Eval Interfaces should be capable of streaming messages. This means they should be able to display content partially, whether character by character, token by token, or word by word.
+
+# Breaking Changes
+
+## 1.0.0
+
+From version `0.2.0` to version `1.0.0`.
+
+Lua functions should start to expect explicit `return` statements.
+
+Before:
+
+```yaml
+---
+lua: |
+  "```" .. content .. "```"
+```
+
+After:
+```yaml
+---
+lua: |
+  return "```" .. content .. "```"
+```
+
+This decision was made to support complex multiline Lua functions. Without explicit `return` statements, implementations would need to infer where to inject the `return` statement to create valid Lua code, which could potentially compromise the functionality of the code through incorrect assumptions.
+
+# Experimental
+
+## Clojure Support
+
+We are exploring the use of [Clojure](https://clojure.org) through [Babashka](https://babashka.org), powered by [GraalVM](https://www.graalvm.org).
+
+Currently, [Lua](https://www.lua.org/about.html) and [Fennel](https://fennel-lang.org) are our primary supported languages, due to their proven portability, widespread availability, lightweight nature, and ease of embedding. If this specific flavor of Clojure continues to demonstrate the potential to offer the same attributes as observed in Lua and Fennel, it may become an additional language that is expected to be supported in our specification. Regardless of this potential move, we have absolutely no intention of removing or replacing Lua or Fennel as the primary supported languages.
+
+The experimental support for Clojure would be similar to Lua and Fennel, using the `clojure:` key:
+
+```yaml
+---
+clojure: |
+  (-> (java.time.ZonedDateTime/now)
+      (.format (java.time.format.DateTimeFormatter/ofPattern "yyyy-MM-dd HH:mm"))
+      (clojure.string/trimr))
+```
