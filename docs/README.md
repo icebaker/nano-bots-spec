@@ -585,7 +585,7 @@ interfaces:
   tools:
     executing:
       feedback: false
-      suffix: "\n"
+      prefix: "\n"
       suffix: "\n"
       color: olive
       adapter:
@@ -1042,8 +1042,8 @@ interfaces:
   repl:
     output:
       stream: true
-      suffix: "\n"
       prefix: "\n"
+      suffix: "\n"
     prompt:
       - text: '🤖'
       - text: '> '
