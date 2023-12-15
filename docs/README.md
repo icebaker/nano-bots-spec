@@ -28,7 +28,7 @@ provider:
     access-token: ENV/OPENAI_API_KEY
   settings:
     user: ENV/NANO_BOTS_END_USER
-    model: gpt-3.5-turbo
+    model: gpt-4-1106-preview
 ```
 
 Here's what a fully-functional implementation of Nano Bots feels like:
@@ -143,7 +143,7 @@ provider:
     access-token: ENV/OPENAI_API_KEY
   settings:
     user: ENV/NANO_BOTS_END_USER
-    model: gpt-3.5-turbo
+    model: gpt-4-1106-preview
 ```
 
 ## Meta
@@ -833,9 +833,18 @@ If you create a Nano Bot that performs a system call to locally installed softwa
 
 Nano Bots should be **provider-agnostic**, which means that the same Nano Bot should be able to run on different providers.
 
-Examples of popular providers include: [Vicuna](https://github.com/lm-sys/FastChat), [Open AI](https://platform.openai.com/docs/api-reference), [Google PaLM](https://developers.generativeai.google), [Alpaca](https://github.com/tatsu-lab/stanford_alpaca), and [LLaMA](https://github.com/facebookresearch/llama).
+Examples of popular providers include:
 
-The `provider:` section of the Cartridge must specify the `id` of the provider, followed by a `credentials` and a `settings` section that includes appropriate information for allowing the Nano Bot to communicate successfully with the provider while adhering to the provider's expected API schema.
+- [Open AI ChatGPT](https://platform.openai.com/docs/api-reference)
+- [Google Gemini](https://cloud.google.com/vertex-ai/docs/generative-ai/model-reference/gemini)
+- [Anthropic Claude](https://www.anthropic.com)
+- [Cohere Command](https://cohere.com)
+- [Meta Llama](https://ai.meta.com/llama/)
+- [01.AI Yi](https://01.ai)
+- [WizardLM](https://wizardlm.github.io)
+- [LMSYS Org FastChat Vicuna](https://github.com/lm-sys/FastChat)
+
+The `provider:` section of the Cartridge must specify the `id` of the provider, followed by a `credentials` and a `settings` section that includes appropriate information for allowing the Nano Bot to communicate successfully with the provider while adhering to the provider's expected API schema. An extra `options` key may be provided if the provider requires options unrelated to its expected API schema.
 
 Minimal sample of a provider section:
 
@@ -848,7 +857,7 @@ provider:
     access-token: ENV/OPENAI_API_KEY
   settings:
     user: ENV/NANO_BOTS_END_USER
-    model: gpt-3.5-turbo
+    model: gpt-4-1106-preview
 ```
 
 ### Credentials
@@ -857,9 +866,9 @@ Although it is possible to set credentials directly in the cartridge YAML, it is
 
 Implementations should apply the regular expression `^ENV.` and replace data with prefixes like `ENV/` or `ENV-` with the corresponding environment variable value. For example, `ENV/OPENAI_API_KEY` should load the environment variable `OPENAI_API_KEY`.
 
-### Open AI
+### Open AI ChatGPT
 
-API Documentation: https://platform.openai.com/docs/api-reference
+API Documentation: https://platform.openai.com/docs/api-reference/chat
 
 ```yaml
 ---
@@ -870,16 +879,48 @@ provider:
     access-token: ENV/OPENAI_API_KEY
   settings:
     user: ENV/NANO_BOTS_END_USER
-    model: gpt-3.5-turbo
+    model: gpt-4-1106-preview
     stream: true
     temperature: 1
     top_p: 1
     n: 1
-    stop: null
+    stop:
+      - .
     max_tokens: null
     presence_penalty: 0
     frequency_penalty: 0
     logit_bias: null
+    seed: null
+    response_format:
+      type: json_object
+```
+
+### Google Gemini
+
+API Documentation: https://cloud.google.com/vertex-ai/docs/generative-ai/model-reference/gemini
+
+```yaml
+---
+provider:
+  id: google
+  credentials:
+    project-id: ENV/GOOGLE_PROJECT_ID
+    file-path: ENV/GOOGLE_CREDENTIALS_FILE_PATH
+    region: ENV/GOOGLE_REGION
+  options:
+    model: gemini-pro
+    stream: true
+  settings:
+    safetySettings:
+      - category: HARM_CATEGORY_DANGEROUS_CONTENT
+        threshold: BLOCK_NONE
+    generationConfig:
+      temperature: 0.9
+      maxOutputTokens: 8192
+      topK: 32
+      topP: 1.0
+      stopSequences:
+        - .
 ```
 
 ## Miscellaneous
@@ -1025,7 +1066,7 @@ provider:
     access-token: ENV/OPENAI_API_KEY
   settings:
     user: ENV/NANO_BOTS_END_USER
-    model: gpt-3.5-turbo
+    model: gpt-4-1106-preview
 ```
 
 These are the default values when the following keys are not specified in the Cartridge file:
@@ -1063,6 +1104,8 @@ interfaces:
       feedback: true
 
 provider:
+  options:
+    stream: true
   settings:
     stream: true
 ```
@@ -1093,7 +1136,7 @@ provider:
     access-token: ENV/OPENAI_API_KEY
   settings:
     user: ENV/NANO_BOTS_END_USER
-    model: gpt-3.5-turbo
+    model: gpt-4-1106-preview
 ```
 
 ### Full Specification
@@ -1298,16 +1341,41 @@ provider:
     access-token: ENV/OPENAI_API_KEY
   settings:
     user: ENV/NANO_BOTS_END_USER
-    model: gpt-3.5-turbo
+    model: gpt-4-1106-preview
     stream: true
     temperature: 1
     top_p: 1
     n: 1
-    stop: null
+    stop:
+      - .
     max_tokens: null
     presence_penalty: 0
     frequency_penalty: 0
     logit_bias: null
+    seed: null
+    response_format:
+      type: json_object
+
+provider:
+  id: google
+  credentials:
+    project-id: ENV/GOOGLE_PROJECT_ID
+    file-path: ENV/GOOGLE_CREDENTIALS_FILE_PATH
+    region: ENV/GOOGLE_REGION
+  options:
+    model: gemini-pro
+    stream: true
+  settings:
+    safetySettings:
+      - category: HARM_CATEGORY_DANGEROUS_CONTENT
+        threshold: BLOCK_NONE
+    generationConfig:
+      temperature: 0.9
+      maxOutputTokens: 8192
+      topK: 32
+      topP: 1.0
+      stopSequences:
+        - .
 
 miscellaneous:
   key: value
