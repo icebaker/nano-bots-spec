@@ -881,18 +881,21 @@ provider:
     user: ENV/NANO_BOTS_END_USER
     model: gpt-4-1106-preview
     stream: true
-    temperature: 1
-    top_p: 1
-    n: 1
-    stop:
-      - .
-    max_tokens: null
-    presence_penalty: 0
     frequency_penalty: 0
     logit_bias: null
-    seed: null
+    logprobs: false
+    top_logprobs: null
+    max_tokens: null
+    n: 1
+    presence_penalty: 0
     response_format:
       type: json_object
+    seed: null
+    stop:
+      - .
+    temperature: 1
+    top_p: 1
+    tool_choice: auto
 ```
 
 ### Google Gemini
@@ -904,8 +907,12 @@ API Documentation: https://cloud.google.com/vertex-ai/docs/generative-ai/model-r
 provider:
   id: google
   credentials:
-    project-id: ENV/GOOGLE_PROJECT_ID
+    service: generative-language-api
+    api-key: ENV/GOOGLE_API_KEY
+  credentials:
+    service: vertex-ai-api
     file-path: ENV/GOOGLE_CREDENTIALS_FILE_PATH
+    project-id: ENV/GOOGLE_PROJECT_ID
     region: ENV/GOOGLE_REGION
   options:
     model: gemini-pro
@@ -917,7 +924,7 @@ provider:
     generationConfig:
       temperature: 0.9
       maxOutputTokens: 8192
-      topK: 32
+      topK: null
       topP: 1.0
       stopSequences:
         - .
@@ -1343,24 +1350,31 @@ provider:
     user: ENV/NANO_BOTS_END_USER
     model: gpt-4-1106-preview
     stream: true
-    temperature: 1
-    top_p: 1
-    n: 1
-    stop:
-      - .
-    max_tokens: null
-    presence_penalty: 0
     frequency_penalty: 0
     logit_bias: null
-    seed: null
+    logprobs: false
+    top_logprobs: null
+    max_tokens: null
+    n: 1
+    presence_penalty: 0
     response_format:
       type: json_object
+    seed: null
+    stop:
+      - .
+    temperature: 1
+    top_p: 1
+    tool_choice: auto
 
 provider:
   id: google
   credentials:
-    project-id: ENV/GOOGLE_PROJECT_ID
+    service: generative-language-api
+    api-key: ENV/GOOGLE_API_KEY
+  credentials:
+    service: vertex-ai-api
     file-path: ENV/GOOGLE_CREDENTIALS_FILE_PATH
+    project-id: ENV/GOOGLE_PROJECT_ID
     region: ENV/GOOGLE_REGION
   options:
     model: gemini-pro
@@ -1372,7 +1386,7 @@ provider:
     generationConfig:
       temperature: 0.9
       maxOutputTokens: 8192
-      topK: 32
+      topK: null
       topP: 1.0
       stopSequences:
         - .
