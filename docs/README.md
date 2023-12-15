@@ -1491,9 +1491,15 @@ Unless otherwise specified in the Cartridge file, or if not supported by the pro
 
 # Breaking Changes
 
+## 2.0.0
+
+From version `1.1.0` to version `2.0.0`:
+
+Google Provider requires a new `service` key in `credentials`.
+
 ## 1.0.0
 
-From version `0.2.0` to version `1.0.0`.
+From version `0.2.0` to version `1.0.0`:
 
 Lua functions should start to expect explicit `return` statements.
 
