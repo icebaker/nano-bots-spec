@@ -911,9 +911,16 @@ provider:
     api-key: ENV/GOOGLE_API_KEY
   credentials:
     service: vertex-ai-api
+    region: ENV/GOOGLE_REGION
+  credentials:
+    service: vertex-ai-api
+    region: ENV/GOOGLE_REGION
+    file-path: ENV/GOOGLE_CREDENTIALS_FILE_PATH
+  credentials:
+    service: vertex-ai-api
+    region: ENV/GOOGLE_REGION
     file-path: ENV/GOOGLE_CREDENTIALS_FILE_PATH
     project-id: ENV/GOOGLE_PROJECT_ID
-    region: ENV/GOOGLE_REGION
   options:
     model: gemini-pro
     stream: true
@@ -1373,9 +1380,16 @@ provider:
     api-key: ENV/GOOGLE_API_KEY
   credentials:
     service: vertex-ai-api
+    region: ENV/GOOGLE_REGION
+  credentials:
+    service: vertex-ai-api
+    region: ENV/GOOGLE_REGION
+    file-path: ENV/GOOGLE_CREDENTIALS_FILE_PATH
+  credentials:
+    service: vertex-ai-api
+    region: ENV/GOOGLE_REGION
     file-path: ENV/GOOGLE_CREDENTIALS_FILE_PATH
     project-id: ENV/GOOGLE_PROJECT_ID
-    region: ENV/GOOGLE_REGION
   options:
     model: gemini-pro
     stream: true
