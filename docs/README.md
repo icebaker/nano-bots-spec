@@ -836,6 +836,7 @@ Nano Bots should be **provider-agnostic**, which means that the same Nano Bot sh
 Examples of popular providers include:
 
 - [Open AI ChatGPT](https://platform.openai.com/docs/api-reference)
+- [Mistral AI](https://docs.mistral.ai/api/)
 - [Google Gemini](https://cloud.google.com/vertex-ai/docs/generative-ai/model-reference/gemini)
 - [Anthropic Claude](https://www.anthropic.com)
 - [Cohere Command](https://cohere.com)
@@ -896,6 +897,27 @@ provider:
     temperature: 1
     top_p: 1
     tool_choice: auto
+```
+
+### Mistral AI
+
+API Documentation: https://docs.mistral.ai/api/
+
+```yaml
+---
+provider:
+  id: mistral
+  credentials:
+    address: ENV/MISTRAL_API_ADDRESS
+    api-key: ENV/MISTRAL_API_KEY
+  settings:
+    model: mistral-medium
+    temperature: 0.7
+    top_p: 1
+    max_tokens: null
+    stream: true
+    safe_mode: false
+    random_seed: null
 ```
 
 ### Google Gemini
