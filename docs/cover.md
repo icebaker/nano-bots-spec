@@ -8,7 +8,7 @@
 - Effortlessly integrate multiple bots to achieve your goals.
 - Share your Nano Bots and enable others to benefit from their abilities.
 
-Version 2.0.1
+Version 2.1.0
 
 [Specification](README)
 [GitHub](https://github.com/icebaker/nano-bots-spec)
