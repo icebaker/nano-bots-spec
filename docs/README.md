@@ -835,15 +835,15 @@ Nano Bots should be **provider-agnostic**, which means that the same Nano Bot sh
 
 Examples of popular providers include:
 
-- [Open AI ChatGPT](https://platform.openai.com/docs/api-reference)
-- [Mistral AI](https://docs.mistral.ai/api/)
-- [Google Gemini](https://cloud.google.com/vertex-ai/docs/generative-ai/model-reference/gemini)
+- [01.AI Yi](https://01.ai)
 - [Anthropic Claude](https://www.anthropic.com)
 - [Cohere Command](https://cohere.com)
-- [Meta Llama](https://ai.meta.com/llama/)
-- [01.AI Yi](https://01.ai)
-- [WizardLM](https://wizardlm.github.io)
+- [Google Gemini](https://cloud.google.com/vertex-ai/docs/generative-ai/model-reference/gemini)
 - [LMSYS Org FastChat Vicuna](https://github.com/lm-sys/FastChat)
+- [Meta Llama](https://ai.meta.com/llama/)
+- [Mistral AI](https://docs.mistral.ai/api/)
+- [OpenAI ChatGPT](https://platform.openai.com/docs/api-reference)
+- [WizardLM](https://wizardlm.github.io)
 
 The `provider:` section of the Cartridge must specify the `id` of the provider, followed by a `credentials` and a `settings` section that includes appropriate information for allowing the Nano Bot to communicate successfully with the provider while adhering to the provider's expected API schema. An extra `options` key may be provided if the provider requires options unrelated to its expected API schema.
 
@@ -867,57 +867,29 @@ Although it is possible to set credentials directly in the cartridge YAML, it is
 
 Implementations should apply the regular expression `^ENV.` and replace data with prefixes like `ENV/` or `ENV-` with the corresponding environment variable value. For example, `ENV/OPENAI_API_KEY` should load the environment variable `OPENAI_API_KEY`.
 
-### Open AI ChatGPT
+### Cohere Command
 
-API Documentation: https://platform.openai.com/docs/api-reference/chat
-
-```yaml
----
-provider:
-  id: openai
-  credentials:
-    address: ENV/OPENAI_API_ADDRESS
-    access-token: ENV/OPENAI_API_KEY
-  settings:
-    user: ENV/NANO_BOTS_END_USER
-    model: gpt-4-1106-preview
-    stream: true
-    frequency_penalty: 0
-    logit_bias: null
-    logprobs: false
-    top_logprobs: null
-    max_tokens: null
-    n: 1
-    presence_penalty: 0
-    response_format:
-      type: json_object
-    seed: null
-    stop:
-      - .
-    temperature: 1
-    top_p: 1
-    tool_choice: auto
-```
-
-### Mistral AI
-
-API Documentation: https://docs.mistral.ai/api/
+API Documentation: https://docs.cohere.com/reference/about
 
 ```yaml
 ---
 provider:
-  id: mistral
+  id: cohere
   credentials:
-    address: ENV/MISTRAL_API_ADDRESS
-    api-key: ENV/MISTRAL_API_KEY
+    address: ENV/COHERE_API_ADDRESS
+    api-key: ENV/COHERE_API_KEY
   settings:
-    model: mistral-medium
-    temperature: 0.7
-    top_p: 1
-    max_tokens: null
+    model: command
     stream: true
-    safe_mode: false
-    random_seed: null
+    prompt_truncation: AUTO
+    connectors:
+      - id: web-search
+    search_queries_only: false
+    documents:
+      - title: Tall penguins
+        snippet: Emperor penguins are the tallest.
+    citation_quality: accurate
+    temperature: 0.3
 ```
 
 ### Google Gemini
@@ -957,6 +929,59 @@ provider:
       topP: 1.0
       stopSequences:
         - .
+```
+
+### Mistral AI
+
+API Documentation: https://docs.mistral.ai/api/
+
+```yaml
+---
+provider:
+  id: mistral
+  credentials:
+    address: ENV/MISTRAL_API_ADDRESS
+    api-key: ENV/MISTRAL_API_KEY
+  settings:
+    model: mistral-medium
+    temperature: 0.7
+    top_p: 1
+    max_tokens: null
+    stream: true
+    safe_mode: false
+    random_seed: null
+```
+
+### OpenAI ChatGPT
+
+API Documentation: https://platform.openai.com/docs/api-reference/chat
+
+```yaml
+---
+provider:
+  id: openai
+  credentials:
+    address: ENV/OPENAI_API_ADDRESS
+    access-token: ENV/OPENAI_API_KEY
+  settings:
+    user: ENV/NANO_BOTS_END_USER
+    model: gpt-4-1106-preview
+    stream: true
+    frequency_penalty: 0
+    logit_bias: null
+    logprobs: false
+    top_logprobs: null
+    max_tokens: null
+    n: 1
+    presence_penalty: 0
+    response_format:
+      type: json_object
+    seed: null
+    stop:
+      - .
+    temperature: 1
+    top_p: 1
+    tool_choice: auto
 ```
 
 ## Miscellaneous
