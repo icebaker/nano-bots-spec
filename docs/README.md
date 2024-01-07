@@ -838,11 +838,13 @@ Examples of popular providers include:
 - [01.AI Yi](https://01.ai)
 - [Anthropic Claude](https://www.anthropic.com)
 - [Cohere Command](https://cohere.com)
-- [Google Gemini](https://cloud.google.com/vertex-ai/docs/generative-ai/model-reference/gemini)
-- [LMSYS Org FastChat Vicuna](https://github.com/lm-sys/FastChat)
+- [Google Gemini](https://deepmind.google/technologies/gemini)
+- [LMSYS Vicuna](https://github.com/lm-sys/FastChat)
+- [Maritaca AI MariTalk](https://www.maritaca.ai)
 - [Meta Llama](https://ai.meta.com/llama/)
-- [Mistral AI](https://docs.mistral.ai/api/)
-- [OpenAI ChatGPT](https://platform.openai.com/docs/api-reference)
+- [Mistral AI](https://mistral.ai)
+- [Ollama](https://ollama.ai)
+- [Open AI ChatGPT](https://openai.com/chatgpt)
 - [WizardLM](https://wizardlm.github.io)
 
 The `provider:` section of the Cartridge must specify the `id` of the provider, followed by a `credentials` and a `settings` section that includes appropriate information for allowing the Nano Bot to communicate successfully with the provider while adhering to the provider's expected API schema. An extra `options` key may be provided if the provider requires options unrelated to its expected API schema.
@@ -931,6 +933,29 @@ provider:
         - .
 ```
 
+### Maritaca AI MariTalk
+
+API Documentation: https://chat.maritaca.ai/docs
+
+```yaml
+---
+provider:
+  id: maritaca
+  credentials:
+    address: ENV/MARITACA_API_ADDRESS
+    api-key: ENV/MARITACA_API_KEY
+  settings:
+    model: maritalk
+    max_tokens: null
+    do_sample: true
+    temperature: 0.7
+    top_p: 0.95
+    repetition_penalty: 1
+    stopping_tokens:
+      - .
+
+```
+
 ### Mistral AI
 
 API Documentation: https://docs.mistral.ai/api/
@@ -950,6 +975,39 @@ provider:
     stream: true
     safe_mode: false
     random_seed: null
+```
+
+### Ollama
+
+API Documentation:
+- https://github.com/jmorganca/ollama/blob/main/docs/api.md#generate-a-chat-completion
+- https://github.com/jmorganca/ollama/blob/main/docs/modelfile.md#valid-parameters-and-values
+
+```yaml
+---
+provider:
+  id: ollama
+  credentials:
+    address: ENV/OLLAMA_API_ADDRESS
+  settings:
+    model: llama2
+    options:
+      mirostat: 0
+      mirostat_eta: 0.1
+      mirostat_tau: 5.0
+      num_ctx: 2048
+      num_gqa: null
+      num_gpu: null
+      num_thread: null
+      repeat_last_n: 64
+      repeat_penalty: 1.1
+      temperature: 0.8
+      seed: 0
+      stop: null
+      tfs_z: 1
+      num_predict: 128
+      top_k: 40
+      top_p: 0.9
 ```
 
 ### OpenAI ChatGPT
