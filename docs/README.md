@@ -105,13 +105,14 @@ Implementations of this specification:
 
 ### Projects
 
-- [Nano Bots Marketplace](https://nbots.io)
 - [Nano Bots CLI (Ruby)](https://github.com/icebaker/ruby-nano-bots)
-- [Nano Bots Clinic (Live Editor)](https://clinic.nbots.io)
-- [Nano Bots API](https://github.com/icebaker/nano-bots-api)
-  - [Public API](https://api.nbots.io)
 - [Nano Bots for Sublime Text](https://github.com/icebaker/sublime-nano-bots)
 - [Nano Bots for Visual Studio Code](https://github.com/icebaker/vscode-nano-bots)
+- [Nano Bots for Obsidian](https://github.com/icebaker/obsidian-nano-bots)
+- [Nano Bots API](https://github.com/icebaker/nano-bots-api)
+  - [Public API](https://api.nbots.io)
+- [Nano Bots Clinic (Live Editor)](https://clinic.nbots.io)
+- [Nano Bots Marketplace](https://nbots.io)
 
 # Cartridges
 
