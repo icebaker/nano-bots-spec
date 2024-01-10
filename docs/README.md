@@ -1139,10 +1139,10 @@ nb assistant - repl
 
 In this case, the implementation should attempt to load either the `assistant.yml` or `assistant.yaml` file.
 
-If the environment variable `NANO_BOTS_CARTRIDGES_DIRECTORY` is defined and the path was not found in the command's working directory, the implementation should attempt to load the file from the path specified in the environment variable:
+If the environment variable `NANO_BOTS_CARTRIDGES_PATH` is defined and the path was not found in the command's working path, the implementation should attempt to load the file from the path specified in the environment variable:
 
 ```bash
-NANO_BOTS_CARTRIDGES_DIRECTORY=/home/user/cartridges
+NANO_BOTS_CARTRIDGES_PATH=/home/user/cartridges
 
 nb assistant - repl
 ```
@@ -1156,7 +1156,7 @@ Paths that should be attempted to be loaded:
 /home/user/cartridges/assistant.yaml
 ```
 
-If no file is found, the implementation should fallback to attempting to load from the default expected cartridges directory, adhering to the [XDG specification](https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html):
+If no file is found, the implementation should fallback to attempting to load from the default expected cartridges path, adhering to the [XDG specification](https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html):
 
 
 ```text
@@ -1446,7 +1446,7 @@ interfaces:
             return name .. " | " .. parameters_as_json .. "\n" .. output
 
 state:
-  directory: ENV/NANO_BOTS_STATE_DIRECTORY
+  path: ENV/NANO_BOTS_STATE_PATH
 
 safety:
   functions:
@@ -1551,14 +1551,14 @@ By default, implementations should be [XDG compliant](https://specifications.fre
 /home/user/.local/state/nano-bots/your-implementation
 ```
 
-If the `NANO_BOTS_STATE_DIRECTORY` environment variable exists, it should be used as the directory to store the states.
+If the `NANO_BOTS_STATE_PATH` environment variable exists, it should be used as the path to store the states.
 
-A Cartridge may include a section that defines a custom directory for storing the states. In this case, it should override both the default and the path specified by the environment variable:
+A Cartridge may include a section that defines a custom path for storing the states. In this case, it should override both the default and the path specified by the environment variable:
 
 ```yaml
 ---
 state:
-  directory: ENV/NANO_BOTS_STATE_DIRECTORY
+  path: ENV/NANO_BOTS_STATE_PATH
 ```
 
 The state should be stored in a manner that ensures isolation between multiple Nano Bots and Implementations.
@@ -1580,7 +1580,7 @@ meta:
   description: A helpful assistant.
 
 state:
-  directory: /home/user/.local/state/nano-bots
+  path: /home/user/.local/state/nano-bots
 
 provider:
   settings:
