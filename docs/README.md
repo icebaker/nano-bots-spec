@@ -1613,7 +1613,7 @@ Unless otherwise specified in the Cartridge file, or if not supported by the pro
 
 ## 3.0.0
 
-From version `2.0.0` to version `3.0.0`:
+From version `2.3.0` to version `3.0.0`:
 
 Cartridges must have a `.yml` or `.yaml` extension.
 
