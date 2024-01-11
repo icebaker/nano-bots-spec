@@ -708,10 +708,10 @@ As an example, this tool provides a random number generator for the Nano Bot:
 ```yaml
 ---
 tools:
-  - name: random-number
-    description: Generates a random number between 1 and 100.
-    fennel: |
-      (math.random 1 100)
+- name: random-number
+  description: Generates a random number between 1 and 100.
+  fennel: |
+    (math.random 1 100)
 ```
 
 `name:` is the identifier name for the function behind the tool. The `description:` helps the Nano Bot understand the purpose of the tool so it can reason about when to properly use it. `fennel:` provides the source code for the function. Like adapters, you could use `lua:` instead:
@@ -719,10 +719,10 @@ tools:
 ```yaml
 ---
 tools:
-  - name: random-number
-    description: Generates a random number between 1 and 100.
-    lua: |
-      return math.random(1, 100)
+- name: random-number
+  description: Generates a random number between 1 and 100.
+  lua: |
+    return math.random(1, 100)
 ```
 
 This is what a REPL execution of a Nano Bot powered by this tool would look like:
@@ -744,23 +744,23 @@ A tool may expect parameters. Parameters are described following the [JSON Schem
 ```yaml
 ---
 tools:
-  - name: random-number
-    description: Generates a random number within a given range.
-    parameters:
-      type: object
-      properties:
-        from:
-          type: integer
-          description: The minimum expected number for random generation.
-        to:
-          type: integer
-          description: The maximum expected number for random generation.
-      required:
-        - from
-        - to
-    fennel: |
-      (let [{ : from : to } parameters]
-        (math.random from to))
+- name: random-number
+  description: Generates a random number within a given range.
+  parameters:
+    type: object
+    properties:
+      from:
+        type: integer
+        description: The minimum expected number for random generation.
+      to:
+        type: integer
+        description: The maximum expected number for random generation.
+    required:
+      - from
+      - to
+  fennel: |
+    (let [{ : from : to } parameters]
+      (math.random from to))
 ```
 
 Note that the function now has access to `parameters`. The same should be true for Lua source code:
@@ -768,22 +768,22 @@ Note that the function now has access to `parameters`. The same should be true f
 ```yaml
 ---
 tools:
-  - name: random-number
-    description: Generates a random number within a given range.
-    parameters:
-      type: object
-      properties:
-        from:
-          type: integer
-          description: The minimum expected number for random generation.
-        to:
-          type: integer
-          description: The maximum expected number for random generation.
-      required:
-        - from
-        - to
-    lua: |
-      return math.random(parameters['from'], parameters['to'])
+- name: random-number
+  description: Generates a random number within a given range.
+  parameters:
+    type: object
+    properties:
+      from:
+        type: integer
+        description: The minimum expected number for random generation.
+      to:
+        type: integer
+        description: The maximum expected number for random generation.
+    required:
+      - from
+      - to
+  lua: |
+    return math.random(parameters['from'], parameters['to'])
 ```
 
 This is what a REPL execution of a Nano Bot powered by this tool would look like:
@@ -808,10 +808,10 @@ You can change this behavior by [disabling the safety configurations](?id=safety
 ```yaml
 ---
 tools:
-  - name: what-time-is-it
-      description: Returns the current date and time.
-      fennel: |
-        (os.date)
+- name: what-time-is-it
+    description: Returns the current date and time.
+    fennel: |
+      (os.date)
 ```
 
 This level of access would allow aslo the execution of [system calls](https://en.wikipedia.org/wiki/System_call), meaning that the source could hipotetically does anything it wants in the operation system. The are two words of cautions here:
