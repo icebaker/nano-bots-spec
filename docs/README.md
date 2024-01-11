@@ -1142,18 +1142,19 @@ In this case, the implementation should attempt to load either the `assistant.ym
 If the environment variable `NANO_BOTS_CARTRIDGES_PATH` is defined and the path was not found in the command's working path, the implementation should attempt to load the file from the path specified in the environment variable:
 
 ```bash
-NANO_BOTS_CARTRIDGES_PATH=/home/user/cartridges
+NANO_BOTS_CARTRIDGES_PATH=/home/aqua/cartridges:/home/lime/cartridges
 
 nb assistant - repl
 ```
 
 Paths that should be attempted to be loaded:
 
-
 ```text
-/home/user/cartridges/assistant
-/home/user/cartridges/assistant.yml
-/home/user/cartridges/assistant.yaml
+/home/aqua/cartridges/assistant.yml
+/home/aqua/cartridges/assistant.yaml
+
+/home/lime/cartridges/assistant.yml
+/home/lime/cartridges/assistant.yaml
 ```
 
 If no file is found, the implementation should fallback to attempting to load from the default expected cartridges path, adhering to the [XDG specification](https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html):
@@ -1611,6 +1612,15 @@ Unless otherwise specified in the Cartridge file, or if not supported by the pro
 
 # Breaking Changes
 
+## 3.0.0
+
+From version `2.0.0` to version `3.0.0`:
+
+`NANO_BOTS_STATE_DIRECTORY` has been renamed to `NANO_BOTS_STATE_PATH`.
+`NANO_BOTS_CARTRIDGES_DIRECTORY` has been renamed to `NANO_BOTS_CARTRIDGES_PATH`.
+
+Although some implementations may offer backward compatibility for these changes, supporting the old names is not expected in version `3.0.0`.
+
 ## 2.0.0
 
 From version `1.1.0` to version `2.0.0`:
@@ -1656,4 +1666,135 @@ clojure: |
   (-> (java.time.ZonedDateTime/now)
       (.format (java.time.format.DateTimeFormatter/ofPattern "yyyy-MM-dd HH:mm"))
       (clojure.string/trimr))
+```
+
+## Markdown Support
+
+We are exploring the use of [Markdown](https://en.wikipedia.org/wiki/Markdown) as a cartridge source code format. The following file extensions become valid cartridges:
+
+```text
+.md .mkdn .mdown .markdown
+```
+
+This is an example of a Markdown cartridge:
+
+````md
+Start by defining a meta section:
+
+```yaml
+meta:
+  symbol: 🤖
+  name: Nano Bot Name
+  author: Your Name
+  description: A helpful assistant.
+```
+
+You can also add version and license information:
+
+```yaml
+meta:
+  version: 1.0.0
+  license: CC0-1.0
+```
+
+Then, add a behavior section:
+
+```yaml
+behaviors:
+  interaction:
+    directive: You are a helpful assistant.
+```
+````
+
+Implementations should extract each code block and merge them to end up with the complete cartridge's source code, ignoring everything else:
+
+```yaml
+---
+meta:
+  symbol: 🤖
+  name: Nano Bot Name
+  author: Your Name
+  description: A helpful assistant.
+  version: 1.0.0
+  license: CC0-1.0
+behaviors:
+  interaction:
+    directive: You are a helpful assistant.
+```
+
+Code blocks in supported languages that appear after a previous tool's definition should be incorporated as the function source code of the last defined tool:
+
+
+````md
+This is the specification of the tool:
+
+```yaml
+tools:
+- name: date-and-time
+  description: Returns the current date and time.
+```
+
+This is the function source code for the tool:
+
+```fnl
+(os.date)
+```
+````
+
+The above Markdown cartridge should be extracted as:
+```yaml
+---
+tools:
+- name: date-and-time
+  description: Returns the current date and time.
+  fennel: |
+    (os.date)
+```
+
+Root keys that are array values should be concatenated:
+
+````md
+This is the first tool:
+
+```yaml
+tools:
+- name: date-and-time
+  description: Returns the current date and time.
+```
+
+That has this source code:
+
+```fnl
+(os.date)
+```
+
+This is the second tool:
+
+```yaml
+tools:
+- name: random-number
+  description: Generates a random number.
+```
+
+With this source code:
+
+```lua
+return math.random()
+```
+
+````
+
+The above Markdown cartridge should be extracted as:
+
+```yaml
+---
+tools:
+- name: date-and-time
+  description: Returns the current date and time.
+  fennel: |
+    (os.date)
+- name: random-number
+  description: Generates a random number.
+  lua: |
+    return math.random()
 ```
