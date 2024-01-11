@@ -708,10 +708,10 @@ As an example, this tool provides a random number generator for the Nano Bot:
 ```yaml
 ---
 tools:
-  - name: random-number
-    description: Generates a random number between 1 and 100.
-    fennel: |
-      (math.random 1 100)
+- name: random-number
+  description: Generates a random number between 1 and 100.
+  fennel: |
+    (math.random 1 100)
 ```
 
 `name:` is the identifier name for the function behind the tool. The `description:` helps the Nano Bot understand the purpose of the tool so it can reason about when to properly use it. `fennel:` provides the source code for the function. Like adapters, you could use `lua:` instead:
@@ -719,10 +719,10 @@ tools:
 ```yaml
 ---
 tools:
-  - name: random-number
-    description: Generates a random number between 1 and 100.
-    lua: |
-      return math.random(1, 100)
+- name: random-number
+  description: Generates a random number between 1 and 100.
+  lua: |
+    return math.random(1, 100)
 ```
 
 This is what a REPL execution of a Nano Bot powered by this tool would look like:
@@ -744,23 +744,23 @@ A tool may expect parameters. Parameters are described following the [JSON Schem
 ```yaml
 ---
 tools:
-  - name: random-number
-    description: Generates a random number within a given range.
-    parameters:
-      type: object
-      properties:
-        from:
-          type: integer
-          description: The minimum expected number for random generation.
-        to:
-          type: integer
-          description: The maximum expected number for random generation.
-      required:
-        - from
-        - to
-    fennel: |
-      (let [{ : from : to } parameters]
-        (math.random from to))
+- name: random-number
+  description: Generates a random number within a given range.
+  parameters:
+    type: object
+    properties:
+      from:
+        type: integer
+        description: The minimum expected number for random generation.
+      to:
+        type: integer
+        description: The maximum expected number for random generation.
+    required:
+      - from
+      - to
+  fennel: |
+    (let [{ : from : to } parameters]
+      (math.random from to))
 ```
 
 Note that the function now has access to `parameters`. The same should be true for Lua source code:
@@ -768,22 +768,22 @@ Note that the function now has access to `parameters`. The same should be true f
 ```yaml
 ---
 tools:
-  - name: random-number
-    description: Generates a random number within a given range.
-    parameters:
-      type: object
-      properties:
-        from:
-          type: integer
-          description: The minimum expected number for random generation.
-        to:
-          type: integer
-          description: The maximum expected number for random generation.
-      required:
-        - from
-        - to
-    lua: |
-      return math.random(parameters['from'], parameters['to'])
+- name: random-number
+  description: Generates a random number within a given range.
+  parameters:
+    type: object
+    properties:
+      from:
+        type: integer
+        description: The minimum expected number for random generation.
+      to:
+        type: integer
+        description: The maximum expected number for random generation.
+    required:
+      - from
+      - to
+  lua: |
+    return math.random(parameters['from'], parameters['to'])
 ```
 
 This is what a REPL execution of a Nano Bot powered by this tool would look like:
@@ -808,10 +808,10 @@ You can change this behavior by [disabling the safety configurations](?id=safety
 ```yaml
 ---
 tools:
-  - name: what-time-is-it
-      description: Returns the current date and time.
-      fennel: |
-        (os.date)
+- name: what-time-is-it
+    description: Returns the current date and time.
+    fennel: |
+      (os.date)
 ```
 
 This level of access would allow aslo the execution of [system calls](https://en.wikipedia.org/wiki/System_call), meaning that the source could hipotetically does anything it wants in the operation system. The are two words of cautions here:
@@ -1139,28 +1139,28 @@ nb assistant - repl
 
 In this case, the implementation should attempt to load either the `assistant.yml` or `assistant.yaml` file.
 
-If the environment variable `NANO_BOTS_CARTRIDGES_DIRECTORY` is defined and the path was not found in the command's working directory, the implementation should attempt to load the file from the path specified in the environment variable:
+If the environment variable `NANO_BOTS_CARTRIDGES_PATH` is defined and the path was not found in the command's working path, the implementation should attempt to load the file from the path specified in the environment variable:
 
 ```bash
-NANO_BOTS_CARTRIDGES_DIRECTORY=/home/user/cartridges
+NANO_BOTS_CARTRIDGES_PATH=/home/aqua/cartridges:/home/lime/cartridges
 
 nb assistant - repl
 ```
 
 Paths that should be attempted to be loaded:
 
-
 ```text
-/home/user/cartridges/assistant
-/home/user/cartridges/assistant.yml
-/home/user/cartridges/assistant.yaml
+/home/aqua/cartridges/assistant.yml
+/home/aqua/cartridges/assistant.yaml
+
+/home/lime/cartridges/assistant.yml
+/home/lime/cartridges/assistant.yaml
 ```
 
-If no file is found, the implementation should fallback to attempting to load from the default expected cartridges directory, adhering to the [XDG specification](https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html):
+If no file is found, the implementation should fallback to attempting to load from the default expected cartridges path, adhering to the [XDG specification](https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html):
 
 
 ```text
-/home/user/.local/share/nano-bots/cartridges/assistant
 /home/user/.local/share/nano-bots/cartridges/assistant.yml
 /home/user/.local/share/nano-bots/cartridges/assistant.yaml
 ```
@@ -1446,7 +1446,7 @@ interfaces:
             return name .. " | " .. parameters_as_json .. "\n" .. output
 
 state:
-  directory: ENV/NANO_BOTS_STATE_DIRECTORY
+  path: ENV/NANO_BOTS_STATE_PATH
 
 safety:
   functions:
@@ -1551,14 +1551,14 @@ By default, implementations should be [XDG compliant](https://specifications.fre
 /home/user/.local/state/nano-bots/your-implementation
 ```
 
-If the `NANO_BOTS_STATE_DIRECTORY` environment variable exists, it should be used as the directory to store the states.
+If the `NANO_BOTS_STATE_PATH` environment variable exists, it should be used as the path to store the states.
 
-A Cartridge may include a section that defines a custom directory for storing the states. In this case, it should override both the default and the path specified by the environment variable:
+A Cartridge may include a section that defines a custom path for storing the states. In this case, it should override both the default and the path specified by the environment variable:
 
 ```yaml
 ---
 state:
-  directory: ENV/NANO_BOTS_STATE_DIRECTORY
+  path: ENV/NANO_BOTS_STATE_PATH
 ```
 
 The state should be stored in a manner that ensures isolation between multiple Nano Bots and Implementations.
@@ -1580,7 +1580,7 @@ meta:
   description: A helpful assistant.
 
 state:
-  directory: /home/user/.local/state/nano-bots
+  path: /home/user/.local/state/nano-bots
 
 provider:
   settings:
@@ -1610,6 +1610,17 @@ States serve as a convenience for users and should not be used to influence Nano
 Unless otherwise specified in the Cartridge file, or if not supported by the provider, both the REPL and Eval Interfaces should be capable of streaming messages. This means they should be able to display content partially, whether character by character, token by token, or word by word.
 
 # Breaking Changes
+
+## 3.0.0
+
+From version `2.3.0` to version `3.0.0`:
+
+Cartridges must have a `.yml` or `.yaml` extension.
+
+`NANO_BOTS_STATE_DIRECTORY` has been renamed to `NANO_BOTS_STATE_PATH`.
+`NANO_BOTS_CARTRIDGES_DIRECTORY` has been renamed to `NANO_BOTS_CARTRIDGES_PATH`.
+
+Although some implementations may offer backward compatibility for these changes, supporting the old names is not expected in version `3.0.0`.
 
 ## 2.0.0
 
@@ -1656,4 +1667,135 @@ clojure: |
   (-> (java.time.ZonedDateTime/now)
       (.format (java.time.format.DateTimeFormatter/ofPattern "yyyy-MM-dd HH:mm"))
       (clojure.string/trimr))
+```
+
+## Markdown Support
+
+We are exploring the use of [Markdown](https://en.wikipedia.org/wiki/Markdown) as a cartridge source code format. The following file extensions become valid cartridges:
+
+```text
+.md .mkdn .mdown .markdown
+```
+
+This is an example of a Markdown cartridge:
+
+````md
+Start by defining a meta section:
+
+```yaml
+meta:
+  symbol: 🤖
+  name: Nano Bot Name
+  author: Your Name
+  description: A helpful assistant.
+```
+
+You can also add version and license information:
+
+```yaml
+meta:
+  version: 1.0.0
+  license: CC0-1.0
+```
+
+Then, add a behavior section:
+
+```yaml
+behaviors:
+  interaction:
+    directive: You are a helpful assistant.
+```
+````
+
+Implementations should extract each code block and merge them to end up with the complete cartridge's source code, ignoring everything else:
+
+```yaml
+---
+meta:
+  symbol: 🤖
+  name: Nano Bot Name
+  author: Your Name
+  description: A helpful assistant.
+  version: 1.0.0
+  license: CC0-1.0
+behaviors:
+  interaction:
+    directive: You are a helpful assistant.
+```
+
+Code blocks in supported languages that appear after a previous tool's definition should be incorporated as the function source code of the last defined tool:
+
+
+````md
+This is the specification of the tool:
+
+```yaml
+tools:
+- name: date-and-time
+  description: Returns the current date and time.
+```
+
+This is the function source code for the tool:
+
+```fnl
+(os.date)
+```
+````
+
+The above Markdown cartridge should be extracted as:
+```yaml
+---
+tools:
+- name: date-and-time
+  description: Returns the current date and time.
+  fennel: |
+    (os.date)
+```
+
+Root keys that are array values should be concatenated:
+
+````md
+This is the first tool:
+
+```yaml
+tools:
+- name: date-and-time
+  description: Returns the current date and time.
+```
+
+That has this source code:
+
+```fnl
+(os.date)
+```
+
+This is the second tool:
+
+```yaml
+tools:
+- name: random-number
+  description: Generates a random number.
+```
+
+With this source code:
+
+```lua
+return math.random()
+```
+
+````
+
+The above Markdown cartridge should be extracted as:
+
+```yaml
+---
+tools:
+- name: date-and-time
+  description: Returns the current date and time.
+  fennel: |
+    (os.date)
+- name: random-number
+  description: Generates a random number.
+  lua: |
+    return math.random()
 ```
