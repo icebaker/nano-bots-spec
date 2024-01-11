@@ -1161,7 +1161,6 @@ If no file is found, the implementation should fallback to attempting to load fr
 
 
 ```text
-/home/user/.local/share/nano-bots/cartridges/assistant
 /home/user/.local/share/nano-bots/cartridges/assistant.yml
 /home/user/.local/share/nano-bots/cartridges/assistant.yaml
 ```
@@ -1615,6 +1614,8 @@ Unless otherwise specified in the Cartridge file, or if not supported by the pro
 ## 3.0.0
 
 From version `2.0.0` to version `3.0.0`:
+
+Cartridges must have a `.yml` or `.yaml` extension.
 
 `NANO_BOTS_STATE_DIRECTORY` has been renamed to `NANO_BOTS_STATE_PATH`.
 `NANO_BOTS_CARTRIDGES_DIRECTORY` has been renamed to `NANO_BOTS_CARTRIDGES_PATH`.
