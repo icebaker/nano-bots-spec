@@ -884,20 +884,20 @@ provider:
   settings:
     model: command-r-plus
     stream: true
-    prompt_truncation: AUTO
+    prompt_truncation: 'OFF'
     connectors:
       - id: web-search
     search_queries_only: false
     documents:
       - title: Tall penguins
-        snippet: Emperor penguins are the tallest.
+        text: Emperor penguins are the tallest.
     citation_quality: accurate
     temperature: 0.3
     max_tokens: null
     max_input_tokens: null
     k: 0
     p: 0.75
-    seed: 1
+    seed: null
     stop_sequences:
       - .
     frequency_penalty: 0.0
