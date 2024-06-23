@@ -52,7 +52,7 @@ provider:
     access-token: ENV/OPENAI_API_KEY
   settings:
     user: ENV/NANO_BOTS_END_USER
-    model: gpt-4-1106-preview
+    model: gpt-4o
 ```
 
 Here's what a fully-functional implementation of Nano Bots feels like:

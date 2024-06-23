@@ -28,7 +28,7 @@ provider:
     access-token: ENV/OPENAI_API_KEY
   settings:
     user: ENV/NANO_BOTS_END_USER
-    model: gpt-4-1106-preview
+    model: gpt-4o
 ```
 
 Here's what a fully-functional implementation of Nano Bots feels like:
@@ -144,7 +144,7 @@ provider:
     access-token: ENV/OPENAI_API_KEY
   settings:
     user: ENV/NANO_BOTS_END_USER
-    model: gpt-4-1106-preview
+    model: gpt-4o
 ```
 
 ## Meta
@@ -859,7 +859,7 @@ provider:
     access-token: ENV/OPENAI_API_KEY
   settings:
     user: ENV/NANO_BOTS_END_USER
-    model: gpt-4-1106-preview
+    model: gpt-4o
 ```
 
 ### Credentials
@@ -1063,7 +1063,7 @@ provider:
     access-token: ENV/OPENAI_API_KEY
   settings:
     user: ENV/NANO_BOTS_END_USER
-    model: gpt-4-1106-preview
+    model: gpt-4o
     stream: true
     stream_options:
       include_usage: false
@@ -1229,7 +1229,7 @@ provider:
     access-token: ENV/OPENAI_API_KEY
   settings:
     user: ENV/NANO_BOTS_END_USER
-    model: gpt-4-1106-preview
+    model: gpt-4o
 ```
 
 These are the default values when the following keys are not specified in the Cartridge file:
@@ -1299,7 +1299,7 @@ provider:
     access-token: ENV/OPENAI_API_KEY
   settings:
     user: ENV/NANO_BOTS_END_USER
-    model: gpt-4-1106-preview
+    model: gpt-4o
 ```
 
 ### Full Specification
@@ -1504,7 +1504,7 @@ provider:
     access-token: ENV/OPENAI_API_KEY
   settings:
     user: ENV/NANO_BOTS_END_USER
-    model: gpt-4-1106-preview
+    model: gpt-4o
     stream: true
     frequency_penalty: 0
     logit_bias: null
