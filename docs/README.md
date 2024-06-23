@@ -868,6 +868,33 @@ Although it is possible to set credentials directly in the cartridge YAML, it is
 
 Implementations should apply the regular expression `^ENV.` and replace data with prefixes like `ENV/` or `ENV-` with the corresponding environment variable value. For example, `ENV/OPENAI_API_KEY` should load the environment variable `OPENAI_API_KEY`.
 
+### Anthropic Claude
+
+API Documentation: https://docs.anthropic.com/en/api/messages
+
+```yaml
+---
+provider:
+  id: anthropic
+  credentials:
+    api-key: ENV/ANTHROPIC_API_KEY
+    anthropic-version: '2023-06-01'
+  settings:
+    model: claude-3-5-sonnet-20240620
+    stream: true
+    max_tokens: 4096
+    temperature: 1.0
+    top_k: null
+    top_p: null
+    tool_choice:
+      type: auto
+      name: null
+    metadata:
+      user_id: ENV/NANO_BOTS_END_USER
+    stop_sequences:
+      - .
+```
+
 ### Cohere Command
 
 API Documentation: https://docs.cohere.com/reference/chat
