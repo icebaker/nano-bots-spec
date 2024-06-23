@@ -839,7 +839,7 @@ Examples of popular providers include:
 - [Cohere Command](https://cohere.com)
 - [Google Gemini](https://deepmind.google/technologies/gemini)
 - [LMSYS Vicuna](https://github.com/lm-sys/FastChat)
-- [Maritaca AI MariTalk](https://www.maritaca.ai)
+- [Maritaca AI Sabiá](https://www.maritaca.ai)
 - [Meta Llama](https://ai.meta.com/llama/)
 - [Mistral AI](https://mistral.ai)
 - [Ollama](https://ollama.ai)
@@ -870,7 +870,7 @@ Implementations should apply the regular expression `^ENV.` and replace data wit
 
 ### Cohere Command
 
-API Documentation: https://docs.cohere.com/reference/about
+API Documentation: https://docs.cohere.com/reference/chat
 
 ```yaml
 ---
@@ -955,7 +955,7 @@ provider:
             type: string
 ```
 
-### Maritaca AI MariTalk
+### Maritaca AI Sabiá
 
 API Documentation: https://chat.maritaca.ai/docs
 
