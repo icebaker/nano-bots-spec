@@ -882,7 +882,7 @@ provider:
     address: ENV/COHERE_API_ADDRESS
     api-key: ENV/COHERE_API_KEY
   settings:
-    model: command
+    model: command-r-plus
     stream: true
     prompt_truncation: AUTO
     connectors:
@@ -893,6 +893,16 @@ provider:
         snippet: Emperor penguins are the tallest.
     citation_quality: accurate
     temperature: 0.3
+    max_tokens: null
+    max_input_tokens: null
+    k: 0
+    p: 0.75
+    seed: 1
+    stop_sequences:
+      - .
+    frequency_penalty: 0.0
+    presence_penalty: 0.0
+    force_single_step: false
 ```
 
 ### Google Gemini
@@ -916,10 +926,14 @@ provider:
   credentials:
     service: vertex-ai-api
     region: ENV/GOOGLE_REGION
+    file_contents: ENV/GOOGLE_CREDENTIALS_FILE_CONTENTS
+  credentials:
+    service: vertex-ai-api
+    region: ENV/GOOGLE_REGION
     file-path: ENV/GOOGLE_CREDENTIALS_FILE_PATH
     project-id: ENV/GOOGLE_PROJECT_ID
   options:
-    model: gemini-pro
+    model: gemini-1.5-pro
     stream: true
   settings:
     safetySettings:
@@ -927,11 +941,20 @@ provider:
         threshold: BLOCK_NONE
     generationConfig:
       temperature: 0.9
-      maxOutputTokens: 8192
+      maxOutputTokens: null
+      candidateCount: 1
+      presencePenalty: null
+      frequencyPenalty: null
       topK: null
       topP: 1.0
       stopSequences:
         - .
+      responseMimeType: application/json
+      responseSchema:
+        type: object
+        properties:
+          name:
+            type: string
 ```
 
 ### Maritaca AI MariTalk
@@ -946,12 +969,14 @@ provider:
     address: ENV/MARITACA_API_ADDRESS
     api-key: ENV/MARITACA_API_KEY
   settings:
-    model: maritalk
+    stream: true
+    model: sabia-2-medium
     max_tokens: null
     do_sample: true
     temperature: 0.7
     top_p: 0.95
     repetition_penalty: 1
+    num_tokens_per_message: null
     stopping_tokens:
       - .
 
@@ -969,12 +994,12 @@ provider:
     address: ENV/MISTRAL_API_ADDRESS
     api-key: ENV/MISTRAL_API_KEY
   settings:
-    model: mistral-medium
+    model: mistral-large
     temperature: 0.7
     top_p: 1
     max_tokens: null
     stream: true
-    safe_mode: false
+    safe_prompt: false
     random_seed: null
 ```
 
@@ -991,24 +1016,40 @@ provider:
   credentials:
     address: ENV/OLLAMA_API_ADDRESS
   settings:
-    model: llama2
+    model: llama3
+    format: json
+    raw: false
     options:
-      mirostat: 0
-      mirostat_eta: 0.1
-      mirostat_tau: 5.0
-      num_ctx: 2048
-      num_gqa: null
-      num_gpu: null
-      num_thread: null
-      repeat_last_n: 64
-      repeat_penalty: 1.1
-      temperature: 0.8
-      seed: 0
-      stop: null
-      tfs_z: 1
-      num_predict: 128
-      top_k: 40
+      num_keep: 5
+      seed: 42
+      num_predict: 100
+      top_k: 20
       top_p: 0.9
+      tfs_z: 0.5
+      typical_p: 0.7
+      repeat_last_n: 33
+      temperature: 0.8
+      repeat_penalty: 1.2
+      presence_penalty: 1.5
+      frequency_penalty: 1.0
+      mirostat: 1
+      mirostat_tau: 0.8
+      mirostat_eta: 0.6
+      penalize_newline: true
+      numa: false
+      num_ctx: 1024
+      num_batch: 2
+      num_gpu: 1
+      main_gpu: 0
+      low_vram: false
+      f16_kv: true
+      vocab_only: false
+      use_mmap: true
+      use_mlock: false
+      num_thread: 8
+      stop: 
+        - "\n"
+        - "user:"
 ```
 
 ### OpenAI ChatGPT
@@ -1026,6 +1067,8 @@ provider:
     user: ENV/NANO_BOTS_END_USER
     model: gpt-4-1106-preview
     stream: true
+    stream_options:
+      include_usage: false
     frequency_penalty: 0
     logit_bias: null
     logprobs: false
@@ -1036,11 +1079,13 @@ provider:
     response_format:
       type: json_object
     seed: null
+    service_tier: null
     stop:
       - .
     temperature: 1
     top_p: 1
     tool_choice: auto
+    parallel_tool_calls: true
 ```
 
 ## Miscellaneous
